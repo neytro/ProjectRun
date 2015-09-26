@@ -1,7 +1,5 @@
 package com.example.neytro.test10;
-
 import android.provider.BaseColumns;
-
 /**
  * Created by Neytro on 2015-07-20.
  */

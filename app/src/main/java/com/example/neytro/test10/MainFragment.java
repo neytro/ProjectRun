@@ -1,5 +1,4 @@
 package com.example.neytro.test10;
-
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -17,7 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import static com.example.neytro.test10.R.id.textViewDistance;
-
 public class MainFragment extends Fragment implements Chronometer.OnChronometerTickListener {
     private View viewMainFragment;
     private Button buttonRestart;
@@ -28,6 +26,7 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
     private ProgressBar progressBarRuchomy;
     private ProgressBar progressBarStaly;
     private Chronometer chronometer;
+    private String periodTime;
     private boolean isMapReady = false;
     private boolean isRunnerIsReady = false;
     private int updatePosition = 0;
@@ -207,6 +206,10 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
         }
     }
 
+    public String getPeriodTime() {
+        return null;
+    }
+
     //add calory
     public void getCalory(float c) {
         calory = c;
@@ -234,6 +237,7 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
 
     //stop stopwatch
     private void timerStop() {
+        periodTime = chronometer.getText().toString();
         isRunnerIsReady = false;
         updatePosition = 0;
         lastPause = SystemClock.elapsedRealtime();
@@ -241,6 +245,10 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
         buttonStop.setVisibility(View.INVISIBLE);
         buttonResume.setVisibility(View.VISIBLE);
         buttonRestart.setVisibility(View.VISIBLE);
+    }
+
+    public String setPeriodTime() {
+        return periodTime;
     }
 
     //resume stopwatch
@@ -260,7 +268,6 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
         mainActivity.loadStack();
         mainActivity.alertDialogMap();
         mainActivity.resetKilometry();
-        chronometer.setBase(SystemClock.elapsedRealtime());
         buttonStart.setVisibility(View.VISIBLE);
         buttonResume.setVisibility(View.INVISIBLE);
         buttonRestart.setVisibility(View.INVISIBLE);

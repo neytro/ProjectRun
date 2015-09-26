@@ -1,5 +1,4 @@
 package com.example.neytro.test10;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -12,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
-
 /**
  * Created by Neytro on 2015-04-03.
  */
@@ -39,7 +37,6 @@ public class HistoryActivity extends ActionBarActivity {
         cursor.moveToFirst();
         if (cursor.getCount() >= 1) {
             for (int i = 0; i < cursor.getCount(); i++) {
-
                 cursor.moveToPosition(i);
                 adapterItem.setSpeed(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_SPEED)));
                 adapterItem.setCalory(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_CALORY)));
@@ -48,7 +45,6 @@ public class HistoryActivity extends ActionBarActivity {
                 adapterItem.setTime(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME)));
                 adapterItem.setTimePeriod(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD)));
                 adapterItem.setImage(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT)));
-
             }
         }
     }
@@ -59,7 +55,6 @@ public class HistoryActivity extends ActionBarActivity {
             TextView textViewInfo = (TextView) findViewById(R.id.textViewInfo);
             textViewInfo.setText(getString(R.string.empty));
         } else {
-
             HistoryActivityClass hisotyrActivityClass = new HistoryActivityClass(this, R.layout.activity_history_array_list, adapterItem);
             listViewAdapter = (ListView) findViewById(R.id.listViewAdapter);
             listViewAdapter.setAdapter(hisotyrActivityClass);

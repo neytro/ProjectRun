@@ -1,7 +1,5 @@
 package com.example.neytro.test10;
-
 import java.util.ArrayList;
-
 /**
  * Created by Neytro on 2015-09-12.
  */

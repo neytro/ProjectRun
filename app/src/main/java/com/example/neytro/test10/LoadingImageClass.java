@@ -1,5 +1,4 @@
 package com.example.neytro.test10;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -13,7 +12,6 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 /**
  * Created by Neytro on 2015-08-16.
  */

@@ -1,5 +1,4 @@
 package com.example.neytro.test10;
-
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -16,6 +15,7 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
@@ -48,7 +48,6 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-
 public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
@@ -68,6 +67,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private LatLng sydney;
     private MapFragment mMapFragment;
     private FileOutputStream fileOutputStream;
+    private Chronometer chronometer;
     private boolean GPSready = false;
     private int updatePosition = 0;
     private float calory = 0;
@@ -313,7 +313,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     //show kilometers
     private void showKilometers(Location location) {
         if (location != null && location.getSpeed() > (float) 0.5 && mainFragment.ifRunnerIsReady() && GPSready) {
-            Toast.makeText(this, "has speed", Toast.LENGTH_LONG).show();
             sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
             updatePosition++;
             if (updatePosition == 1) {
@@ -384,9 +383,15 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             public void onClick(DialogInterface dialog, int which) {
                 getSnapshot();
                 saveDatabase();
+                resetPeriodTime();
             }
         });
-        alertDialog.setNegativeButton(getString(R.string.no), null);
+        alertDialog.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                resetPeriodTime();
+            }
+        });
         alertDialog.show();
     }
 
@@ -490,7 +495,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     //save value in database
     private void saveDatabase() {
         String pathForImage = LoadingImageClass.pathForImage().getAbsolutePath();
-        Chronometer chronometer = (Chronometer) findViewById(R.id.chronometer);
+        chronometer = (Chronometer) findViewById(R.id.chronometer);
         FeedReaderDbHelper myDatabase = new FeedReaderDbHelper(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -503,6 +508,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD, chronometer.getText().toString());
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT, pathForImage);
         database.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values);
+    }
+
+    private void resetPeriodTime() {
+        chronometer.setBase(SystemClock.elapsedRealtime());
     }
 
     //get real time

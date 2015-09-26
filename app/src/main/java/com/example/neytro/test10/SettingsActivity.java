@@ -1,10 +1,8 @@
 package com.example.neytro.test10;
-
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
-
 /**
  * Created by Neytro on 2015-04-03.
  */

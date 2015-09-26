@@ -1,9 +1,7 @@
 package com.example.neytro.test10;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 /**
  * Created by Neytro on 2015-07-20.
  */
