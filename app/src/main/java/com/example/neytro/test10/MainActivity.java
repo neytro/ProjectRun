@@ -157,25 +157,25 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     //activate when map is ready
     @Override
-    public void onMapReady(GoogleMap g) {
-        googleMap = g;
+    public void onMapReady(GoogleMap _googleMap) {
+        googleMap = _googleMap;
         sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-        g.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        g.setMyLocationEnabled(true);
-        g.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
-        g.getCameraPosition();
-        UiSettings uiSettings = g.getUiSettings();
+        _googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        _googleMap.setMyLocationEnabled(true);
+        _googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
+        _googleMap.getCameraPosition();
+        UiSettings uiSettings = _googleMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setRotateGesturesEnabled(true);
         uiSettings.setMapToolbarEnabled(false);
         if (mainFragment.isMapReady()) {
-            g.addMarker(new MarkerOptions().position(sydney).title("START"));
+            _googleMap.addMarker(new MarkerOptions().position(sydney).title("START"));
         }
     }
 
     //draw route in google map
-    public void drawRoute(Location location) {
-        latLngRoute = new LatLng(location.getLatitude(), location.getLongitude());
+    public void drawRoute(Location _location) {
+        latLngRoute = new LatLng(_location.getLatitude(), _location.getLongitude());
         coordList.add(latLngRoute);
         PolylineOptions options = new PolylineOptions();
         if (coordList.size() > 1) {
@@ -275,9 +275,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     //add menu to image in actionbar
-    private void setOnPupMenu(View v) {
+    private void setOnPupMenu(View _view) {
         Context context = getApplicationContext();
-        PopupMenu popup = new PopupMenu(context, v);
+        PopupMenu popup = new PopupMenu(context, _view);
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -311,21 +311,21 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     //show kilometers
-    private void showKilometers(Location location) {
-        if (location != null && location.getSpeed() > (float) 0.5 && mainFragment.ifRunnerIsReady() && GPSready) {
+    private void showKilometers(Location _location) {
+        if (_location != null && _location.getSpeed() > (float) 0.5 && mainFragment.ifRunnerIsReady() && GPSready) {
             sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
             updatePosition++;
             if (updatePosition == 1) {
                 //lastLocation.set(location);
             } else {
-                drawRoute(location);
-                kilometry = kilometry + lastLocation.distanceTo(location);
-                speed = location.getSpeed() * (float) 3.6;
+                drawRoute(_location);
+                kilometry = kilometry + lastLocation.distanceTo(_location);
+                speed = _location.getSpeed() * (float) 3.6;
                 calory = calory + calculateCalory(speed);
                 mainFragment.getPredkosc(speed);
                 mainFragment.getDistance(kilometry / 1000);
                 mainFragment.getCalory(calory);
-                lastLocation.set(location);
+                lastLocation.set(_location);
             }
         }
     }
@@ -337,13 +337,13 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     //calculate burned calory
-    private float calculateCalory(float speed) {
+    private float calculateCalory(float _speed) {
         float wynik = 0;
-        if (speed < 5) {
+        if (_speed < 5) {
             wynik = (float) 0.23;
-        } else if (speed < 10) {
+        } else if (_speed < 10) {
             wynik = (float) 0.83;
-        } else if (speed > 10) {
+        } else if (_speed > 10) {
             wynik = (float) 0.75;
         }
         return wynik;

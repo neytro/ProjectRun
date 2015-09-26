@@ -13,72 +13,72 @@ public class AdapterItem {
     private ArrayList<String> image;
 
     //take value speed
-    public void setSpeed(String s) {
+    public void setSpeed(String _speed) {
         if (speed == null) {
             speed = new ArrayList<>();
-            speed.add(s);
+            speed.add(_speed);
         } else {
-            speed.add(s);
+            speed.add(_speed);
         }
     }
 
     //take value distance
-    public void setDistance(String d) {
+    public void setDistance(String _distance) {
         if (distance == null) {
             distance = new ArrayList<>();
-            distance.add(d);
+            distance.add(_distance);
         } else {
-            distance.add(d);
+            distance.add(_distance);
         }
     }
 
     //take value calory
-    public void setCalory(String c) {
+    public void setCalory(String _calory) {
         if (calory == null) {
             calory = new ArrayList<>();
-            calory.add(c);
+            calory.add(_calory);
         } else {
-            calory.add(c);
+            calory.add(_calory);
         }
     }
 
     //take value date
-    public void setDate(String d) {
+    public void setDate(String _date) {
         if (date == null) {
             date = new ArrayList<>();
-            date.add(d);
+            date.add(_date);
         } else {
-            date.add(d);
+            date.add(_date);
         }
     }
 
     //take value time
-    public void setTime(String t) {
+    public void setTime(String _time) {
         if (time == null) {
             time = new ArrayList<>();
-            time.add(t);
+            time.add(_time);
         } else {
-            time.add(t);
+            time.add(_time);
         }
     }
 
     //take value timePeriod
-    public void setTimePeriod(String t) {
+    public void setTimePeriod(String _timePeriod) {
         if (timePeriod == null) {
             timePeriod = new ArrayList<>();
-            timePeriod.add(t);
+            timePeriod.add(_timePeriod);
         } else {
-            timePeriod.add(t);
+            timePeriod.add(_timePeriod);
         }
     }
 
     //take value image
-    public void setImage(String i) {
+    public void setImage(String _image) {
         if (image == null) {
             image = new ArrayList<>();
-            image.add(i);
+            image.add(_image);
         } else {
-            image.add(i);
+            image.add(_image);
         }
     }
 

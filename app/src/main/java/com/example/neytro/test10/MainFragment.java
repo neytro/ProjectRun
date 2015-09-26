@@ -191,30 +191,26 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
     }
 
     //add distance
-    public void getDistance(float d) {
-        distance = d;
+    public void getDistance(float _distance) {
+        distance = _distance;
         if (whichCopy == 0) {
-            textViewOdleglosc.setText(String.valueOf(round(d, 2)) + " km");
+            textViewOdleglosc.setText(String.valueOf(round(_distance, 2)) + " km");
         }
     }
 
     //add speed
-    public void getPredkosc(float s) {
-        speed = s;
+    public void getPredkosc(float _speed) {
+        speed = _speed;
         if (whichCopy == 1) {
-            textViewOdleglosc.setText(String.valueOf(round(s, 2)) + " km/h");
+            textViewOdleglosc.setText(String.valueOf(round(_speed, 2)) + " km/h");
         }
     }
 
-    public String getPeriodTime() {
-        return null;
-    }
-
     //add calory
-    public void getCalory(float c) {
-        calory = c;
+    public void getCalory(float _calory) {
+        calory = _calory;
         if (whichCopy == 2) {
-            textViewOdleglosc.setText(String.valueOf(round(c, 2)) + " kcal");
+            textViewOdleglosc.setText(String.valueOf(round(_calory, 2)) + " kcal");
         }
     }
 
