@@ -39,6 +39,7 @@ public class HistoryActivity extends ActionBarActivity {
         cursor.moveToFirst();
         if (cursor.getCount() >= 1) {
             for (int i = 0; i < cursor.getCount(); i++) {
+
                 cursor.moveToPosition(i);
                 adapterItem.setSpeed(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_SPEED)));
                 adapterItem.setCalory(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_CALORY)));
@@ -47,18 +48,22 @@ public class HistoryActivity extends ActionBarActivity {
                 adapterItem.setTime(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME)));
                 adapterItem.setTimePeriod(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD)));
                 adapterItem.setImage(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT)));
+
             }
-        } else {
-            TextView textViewInfo = (TextView) findViewById(R.id.textViewInfo);
-            textViewInfo.setText(getString(R.string.empty));
         }
     }
 
     //add adapter to listview
     private void setActivityAddapter() {
-        HistoryActivityClass hisotyrActivityClass = new HistoryActivityClass(this, R.layout.activity_history_array_list, adapterItem);
-        listViewAdapter = (ListView) findViewById(R.id.listViewAdapter);
-        listViewAdapter.setAdapter(hisotyrActivityClass);
+        if (adapterItem.getSpeed() == null) {
+            TextView textViewInfo = (TextView) findViewById(R.id.textViewInfo);
+            textViewInfo.setText(getString(R.string.empty));
+        } else {
+
+            HistoryActivityClass hisotyrActivityClass = new HistoryActivityClass(this, R.layout.activity_history_array_list, adapterItem);
+            listViewAdapter = (ListView) findViewById(R.id.listViewAdapter);
+            listViewAdapter.setAdapter(hisotyrActivityClass);
+        }
     }
 
     //create menu to main activity

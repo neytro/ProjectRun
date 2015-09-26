@@ -38,13 +38,16 @@ public class HistoryActivityClass extends ArrayAdapter<String> {
             holder.textViewDbTime = (TextView) convertView.findViewById(R.id.textViewDbTime);
             holder.textViewDbTimePeriod = (TextView) convertView.findViewById(R.id.textViewDbTimePeriod);
             holder.imageViewIcon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
-            loader.loadImage(adapterItem.getImage().get(position), holder.imageViewIcon);
+
+
             convertView.setTag(holder);
             viewHolder = holder;
         } else {
             holder = (ViewHolder) convertView.getTag();
             viewHolder = holder;
         }
+
+        loader.loadImage(adapterItem.getImage().get(position), holder.imageViewIcon);
         holder.textViewDbDate.setText(adapterItem.getDate().get(position));
         holder.textViewDbDistance.setText(adapterItem.getDistance().get(position));
         holder.textViewDbCalory.setText(adapterItem.getCalory().get(position));
@@ -63,5 +66,6 @@ public class HistoryActivityClass extends ArrayAdapter<String> {
         TextView textViewDbCalory;
         TextView textViewDbSpeed;
         ImageView imageViewIcon;
+
     }
 }
