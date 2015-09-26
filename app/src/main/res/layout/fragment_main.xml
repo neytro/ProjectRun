@@ -1,0 +1,104 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".MainActivity"
+                android:background="@android:color/black"
+                android:id="@+id/relativeLayoutMainFragment"
+    >
+    <ProgressBar
+        style="?android:attr/progressBarStyleLargeInverse"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:indeterminate="false"
+        android:id="@+id/progressBarStaly"
+        android:visibility="visible"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminateDuration="1"
+        />
+    <ProgressBar
+        style="?android:attr/progressBarStyleLargeInverse"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:indeterminate="false"
+        android:id="@+id/progressBarRuchomy"
+        android:visibility="invisible"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminateDuration="4980"
+
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnStart"
+        android:onClick="setTimer"
+        android:background="@drawable/ic_action_play"
+        android:layout_alignBaseline="@+id/btnResume"
+        android:layout_alignBottom="@+id/btnResume"
+        android:layout_centerHorizontal="true"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:id="@+id/btnStop"
+        android:onClick="setTimer"
+
+
+        android:background="@drawable/ic_action_pause"
+        android:layout_alignTop="@+id/btnStart"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnResume"
+
+        android:onClick="setTimer"
+        android:visibility="invisible"
+        android:background="@drawable/ic_action_play"
+        android:layout_alignParentBottom="true" android:layout_toLeftOf="@+id/btnStart" android:layout_toStartOf="@+id/btnStart"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnRestart"
+        android:onClick="setTimer"
+        android:visibility="invisible"
+        android:background="@drawable/ic_action_restart"
+        android:layout_alignParentBottom="true" android:layout_toRightOf="@+id/btnStart" android:layout_toEndOf="@+id/btnStart"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:id="@+id/linearLayoutChronometer"
+        android:gravity="center|center_vertical|center_horizontal"
+        android:layout_centerVertical="true" android:layout_centerHorizontal="true">
+        <Chronometer
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/chronometer"
+            android:format="00:%s"
+            android:autoText="true"
+            android:textSize="@dimen/font_StopWatch"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0 km"
+            android:id="@+id/textViewDistance"
+            android:layout_below="@+id/chronometer"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/font_kilometers" android:clickable="true"
+            android:onClick="showPicker"
+            />
+    </LinearLayout>
+
+
+</RelativeLayout>

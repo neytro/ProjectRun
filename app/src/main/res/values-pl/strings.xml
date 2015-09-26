@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Project RUN</string>
+    <string name="ignor">IGNOR</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="history">Historie</string>
+    <string name="exit">Wyjście</string>
+    <string name="disconnected_GoogleService">Zostałeś rozłączony z Google Service.</string>
+    <string name="problemConnection_GoogleService">Problem z połączeniem</string>
+    <string name="GPStitle">Nieaktywny GPS</string>
+    <string name="GPSmessage">Przejdź do ustawień, i uaktywnij GPS</string>
+    <string name="Settings">USTAWIENIA</string>
+    <string name="messageExit">Naprawdę?</string>
+    <string name="yes">TAK</string>
+    <string name="no">NIE</string>
+    <string name="date">Data:</string>
+    <string name="calory">Kalorie:</string>
+    <string name="speed">Prędkość:</string>
+    <string name="distance">Odległość:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Czarny ekran</string>
+    <string name="dialogTitlePicker">Wybierz kategorie</string>
+    <string name="snapshot">Status został zapisany do Historii</string>
+    <string name="empty">EMPTY</string>
+    <string name="saveHistory">save to history</string>
+    <string name="saveState">Do you like save state?</string>
+    <string name="clear">Usuń historie</string>
+    <string name="title_usuniecie_historii">Usuwanie Historii</string>
+    <string name="time">Czas:</string>
+    <string name="timePeriod">Czas trwania:</string>
+    <string-array name="dialog_list">
+        <item>Odległość</item>
+        <item>Prędkość</item>
+        <item>Kalorie</item>
+    </string-array>
+</resources>
