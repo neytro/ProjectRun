@@ -20,8 +20,8 @@ public class HistoryActivity extends ActionBarActivity {
     private AdapterItem adapterItem;
 
     @Override
-    protected void onCreate(Bundle _savedInstanceState) {
-        super.onCreate(_savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         setActionBar();
         readData();
@@ -63,16 +63,16 @@ public class HistoryActivity extends ActionBarActivity {
 
     //create menu to main activity
     @Override
-    public boolean onCreateOptionsMenu(Menu _menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_history, _menu);
-        return super.onCreateOptionsMenu(_menu);
+        menuInflater.inflate(R.menu.menu_history, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     //listener for menu
     @Override
-    public boolean onOptionsItemSelected(MenuItem _item) {
-        switch (_item.getItemId()) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
                 return (true);
@@ -80,7 +80,7 @@ public class HistoryActivity extends ActionBarActivity {
                 alertDialogClearData();
                 return (true);
         }
-        return super.onOptionsItemSelected(_item);
+        return super.onOptionsItemSelected(item);
     }
 
     //add action bar

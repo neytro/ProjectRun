@@ -20,8 +20,8 @@ public class LoadingImageClass {
         private String url;
         private final WeakReference<ImageView> imageViewReference;
 
-        public BitmapDownloaderTask(ImageView _imageView) {
-            imageViewReference = new WeakReference<ImageView>(_imageView);
+        public BitmapDownloaderTask(ImageView imageView) {
+            imageViewReference = new WeakReference<ImageView>(imageView);
         }
 
         @Override
@@ -33,24 +33,24 @@ public class LoadingImageClass {
 
         @Override
         // Once the image is downloaded, associates it to the imageView
-        protected void onPostExecute(Bitmap _bitmap) {
+        protected void onPostExecute(Bitmap bitmap) {
             if (isCancelled()) {
-                _bitmap = null;
+                bitmap = null;
             }
             if (imageViewReference != null) {
                 ImageView imageView = imageViewReference.get();
                 BitmapDownloaderTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
                 // Change bitmap only if this process is still associated with it
                 if (this == bitmapDownloaderTask) {
-                    imageView.setImageBitmap(_bitmap);
+                    imageView.setImageBitmap(bitmap);
                 }
             }
         }
     }
 
-    private static BitmapDownloaderTask getBitmapDownloaderTask(ImageView _imageView) {
-        if (_imageView != null) {
-            Drawable drawable = _imageView.getDrawable();
+    private static BitmapDownloaderTask getBitmapDownloaderTask(ImageView imageView) {
+        if (imageView != null) {
+            Drawable drawable = imageView.getDrawable();
             if (drawable instanceof DownloadedDrawable) {
                 DownloadedDrawable downloadedDrawable = (DownloadedDrawable) drawable;
                 return downloadedDrawable.getBitmapDownloaderTask();
@@ -73,20 +73,20 @@ public class LoadingImageClass {
         }
     }
 
-    public void loadImage(String _url, ImageView _imageView) {
-        if (cancelPotentialDownload(_url, _imageView)) {
-            BitmapDownloaderTask task = new BitmapDownloaderTask(_imageView);
+    public void loadImage(String url, ImageView imageView) {
+        if (cancelPotentialDownload(url, imageView)) {
+            BitmapDownloaderTask task = new BitmapDownloaderTask(imageView);
             DownloadedDrawable downloadedDrawable = new DownloadedDrawable(task);
-            _imageView.setImageDrawable(downloadedDrawable);
-            task.execute(_url);
+            imageView.setImageDrawable(downloadedDrawable);
+            task.execute(url);
         }
     }
 
-    private static boolean cancelPotentialDownload(String _url, ImageView _imageView) {
-        BitmapDownloaderTask bitmapDownloaderTask = getBitmapDownloaderTask(_imageView);
+    private static boolean cancelPotentialDownload(String url, ImageView imageView) {
+        BitmapDownloaderTask bitmapDownloaderTask = getBitmapDownloaderTask(imageView);
         if (bitmapDownloaderTask != null) {
             String bitmapUrl = bitmapDownloaderTask.url;
-            if ((bitmapUrl == null) || (!bitmapUrl.equals(_url))) {
+            if ((bitmapUrl == null) || (!bitmapUrl.equals(url))) {
                 bitmapDownloaderTask.cancel(true);
             } else {
                 // The same URL is already being downloaded.
@@ -97,18 +97,18 @@ public class LoadingImageClass {
     }
 
     //optimize image
-    public static int calculateInSampleSize(BitmapFactory.Options _options, int _reqWidth, int _reqHeight) {
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
-        final int height = _options.outHeight;
-        final int width = _options.outWidth;
+        final int height = options.outHeight;
+        final int width = options.outWidth;
         int inSampleSize = 1;
-        if (height > _reqHeight || width > _reqWidth) {
+        if (height > reqHeight || width > reqWidth) {
             final int halfHeight = height / 2;
             final int halfWidth = width / 2;
             // Calculate the largest inSampleSize value that is a power of 2 and keeps both
             // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > _reqHeight
-                    && (halfWidth / inSampleSize) > _reqWidth) {
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
                 inSampleSize *= 2;
             }
         }
@@ -116,16 +116,16 @@ public class LoadingImageClass {
     }
 
     //load image
-    public static Bitmap loadBitmap(String _res, int _reqWidth, int _reqHeight) {
+    public static Bitmap loadBitmap(String res, int reqWidth, int reqHeight) {
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(_res, options);
+        BitmapFactory.decodeFile(res, options);
         // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, _reqWidth, _reqHeight);
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(_res, options);
+        return BitmapFactory.decodeFile(res, options);
     }
 
     //set Path for saving file

@@ -7,9 +7,9 @@ public class ActualTime {
     private String time;
     private String date;
 
-    public ActualTime(String... _time) {
-        time = _time[0];
-        date = _time[1];
+    public ActualTime(String... time) {
+        this.time = time[0];
+        this.date = time[1];
     }
 
     public String getTime() {

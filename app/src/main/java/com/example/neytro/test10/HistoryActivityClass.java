@@ -15,41 +15,41 @@ public class HistoryActivityClass extends ArrayAdapter<String> {
     private ViewHolder viewHolder = new ViewHolder();
     private LoadingImageClass loader = new LoadingImageClass();
 
-    public HistoryActivityClass(Context _context, int _resource, AdapterItem _adapter) {
-        super(_context, _resource, _adapter.getCalory());
-        contextList = _context;
-        adapterItem = _adapter;
+    public HistoryActivityClass(Context context, int resource, AdapterItem adapter) {
+        super(context, resource, adapter.getCalory());
+        contextList = context;
+        adapterItem = adapter;
     }
 
     //set items in listview
     @Override
-    public View getView(int _position, View _convertView, ViewGroup _parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if (_convertView == null) {
+        if (convertView == null) {
             holder = new ViewHolder();
             LayoutInflater layoutInflater = LayoutInflater.from(contextList);
-            _convertView = layoutInflater.inflate(R.layout.activity_history_array_list, null);
-            holder.textViewDbDate = (TextView) _convertView.findViewById(R.id.textViewDbDate);
-            holder.textViewDbDistance = (TextView) _convertView.findViewById(R.id.textViewDbDistance);
-            holder.textViewDbCalory = (TextView) _convertView.findViewById(R.id.textViewDbCalory);
-            holder.textViewDbSpeed = (TextView) _convertView.findViewById(R.id.textViewDbSpeed);
-            holder.textViewDbTime = (TextView) _convertView.findViewById(R.id.textViewDbTime);
-            holder.textViewDbTimePeriod = (TextView) _convertView.findViewById(R.id.textViewDbTimePeriod);
-            holder.imageViewIcon = (ImageView) _convertView.findViewById(R.id.imageViewIcon);
-            _convertView.setTag(holder);
+            convertView = layoutInflater.inflate(R.layout.activity_history_array_list, null);
+            holder.textViewDbDate = (TextView) convertView.findViewById(R.id.textViewDbDate);
+            holder.textViewDbDistance = (TextView) convertView.findViewById(R.id.textViewDbDistance);
+            holder.textViewDbCalory = (TextView) convertView.findViewById(R.id.textViewDbCalory);
+            holder.textViewDbSpeed = (TextView) convertView.findViewById(R.id.textViewDbSpeed);
+            holder.textViewDbTime = (TextView) convertView.findViewById(R.id.textViewDbTime);
+            holder.textViewDbTimePeriod = (TextView) convertView.findViewById(R.id.textViewDbTimePeriod);
+            holder.imageViewIcon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
+            convertView.setTag(holder);
             viewHolder = holder;
         } else {
-            holder = (ViewHolder) _convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
             viewHolder = holder;
         }
-        loader.loadImage(adapterItem.getImage().get(_position), holder.imageViewIcon);
-        holder.textViewDbDate.setText(adapterItem.getDate().get(_position));
-        holder.textViewDbDistance.setText(adapterItem.getDistance().get(_position));
-        holder.textViewDbCalory.setText(adapterItem.getCalory().get(_position));
-        holder.textViewDbSpeed.setText(adapterItem.getSpeed().get(_position));
-        holder.textViewDbTime.setText(adapterItem.getTime().get(_position));
-        holder.textViewDbTimePeriod.setText(adapterItem.getTimePeriod().get(_position));
-        return _convertView;
+        loader.loadImage(adapterItem.getImage().get(position), holder.imageViewIcon);
+        holder.textViewDbDate.setText(adapterItem.getDate().get(position));
+        holder.textViewDbDistance.setText(adapterItem.getDistance().get(position));
+        holder.textViewDbCalory.setText(adapterItem.getCalory().get(position));
+        holder.textViewDbSpeed.setText(adapterItem.getSpeed().get(position));
+        holder.textViewDbTime.setText(adapterItem.getTime().get(position));
+        holder.textViewDbTimePeriod.setText(adapterItem.getTimePeriod().get(position));
+        return convertView;
     }
 
     //keep reference for items

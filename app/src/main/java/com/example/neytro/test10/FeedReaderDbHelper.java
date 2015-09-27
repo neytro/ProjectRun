@@ -25,24 +25,24 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + FeedReaderContract.FeedEntry.TABLE_NAME;
 
-    public FeedReaderDbHelper(Context _context) {
-        super(_context, DATABASE_NAME, null, DATABASE_VERSION);
+    public FeedReaderDbHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     //create database
-    public void onCreate(SQLiteDatabase _db) {
-        _db.execSQL(SQL_CREATE_ENTRIES);
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(SQL_CREATE_ENTRIES);
     }
 
     //upgrade database
-    public void onUpgrade(SQLiteDatabase _db, int _oldVersion, int _newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        _db.execSQL(SQL_DELETE_ENTRIES);
-        onCreate(_db);
+        db.execSQL(SQL_DELETE_ENTRIES);
+        onCreate(db);
     }
 
-    public void onDowngrade(SQLiteDatabase _db, int _oldVersion, int _newVersion) {
-        onUpgrade(_db, _oldVersion, _newVersion);
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        onUpgrade(db, oldVersion, newVersion);
     }
 }
