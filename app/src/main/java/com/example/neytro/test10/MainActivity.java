@@ -507,7 +507,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     private void resetPeriodTime() {
-        chronometer.setBase(SystemClock.elapsedRealtime());
+        if (chronometer != null) {
+            chronometer.setBase(SystemClock.elapsedRealtime());
+        }
     }
 
     //get real time

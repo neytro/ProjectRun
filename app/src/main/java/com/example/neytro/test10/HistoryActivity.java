@@ -111,5 +111,6 @@ public class HistoryActivity extends ActionBarActivity {
         FeedReaderDbHelper myDatabase = new FeedReaderDbHelper(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
         database.delete(FeedReaderContract.FeedEntry.TABLE_NAME, null, null);
+        listViewAdapter.setAdapter(null);
     }
 }
