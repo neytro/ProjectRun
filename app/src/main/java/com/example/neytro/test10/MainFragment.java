@@ -29,6 +29,7 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
     private String periodTime;
     private boolean isMapReady = false;
     private boolean isRunnerIsReady = false;
+    private boolean isRestartReady = false;
     private int updatePosition = 0;
     private int whichCopy = 0;
     private int liczGodziny = 0;
@@ -103,11 +104,7 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
     @Override
     public void onDetach() {
         super.onDetach();
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -174,6 +171,12 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
     //check if GoogleMap is ready
     public boolean isMapReady() {
         return isMapReady;
+    }
+    public boolean isRestartReady() {
+        return isRestartReady;
+    }
+    public void setRestartFalse(){
+        isRestartReady = false;
     }
 
     //calcualte hour for stopwatch
@@ -262,7 +265,6 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.setMapFragment();
         mainActivity.loadStack();
-        mainActivity.alertDialogMap();
         mainActivity.resetKilometry();
         buttonStart.setVisibility(View.VISIBLE);
         buttonResume.setVisibility(View.INVISIBLE);
@@ -273,6 +275,7 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
         chronometer.stop();
         chronometer.setFormat("00:%s");
         isMapReady = false;
+        isRestartReady=true;
     }
 }
 

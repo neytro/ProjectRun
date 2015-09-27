@@ -8,9 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
@@ -171,6 +169,19 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         if (mainFragment.isMapReady()) {
             _googleMap.addMarker(new MarkerOptions().position(sydney).title("START"));
         }
+        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            public void onMapLoaded() {
+                googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                    public void onSnapshotReady(Bitmap bitmap) {
+                        // Write image to disk
+                        if (mainFragment.isRestartReady()) {
+                            alertDialogMap(bitmap);
+                            mainFragment.setRestartFalse();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     //draw route in google map
@@ -374,14 +385,14 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     //alertdialog to save history
-    public void alertDialogMap() {
+    public void alertDialogMap(final Bitmap bitmap) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
         alertDialog.setTitle(getString(R.string.saveHistory));
         alertDialog.setMessage(getString(R.string.saveState));
         alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                getSnapshot();
+                getSnapshot(bitmap);
                 saveDatabase();
                 resetPeriodTime();
             }
@@ -466,30 +477,15 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     //take screenshot form googleMap
-    public void getSnapshot() {
-        GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
-            @Override
-            public void onSnapshotReady(Bitmap snapshot) {
-                View mView = findViewById(R.id.fragmentContainer);
-                try {
-                    mView.setDrawingCacheEnabled(true);
-                    Bitmap backBitmap = mView.getDrawingCache();
-                    Bitmap bmOverlay = Bitmap.createBitmap(
-                            backBitmap.getWidth(), backBitmap.getHeight(),
-                            backBitmap.getConfig());
-                    Canvas canvas = new Canvas(bmOverlay);
-                    canvas.drawBitmap(snapshot, new Matrix(), null);
-                    canvas.drawBitmap(backBitmap, 0, 0, null);
-                    fileOutputStream = new FileOutputStream(LoadingImageClass.pathForImage());
-                    bmOverlay.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-                    fileOutputStream.flush();
-                    fileOutputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        googleMap.snapshot(callback);
+    public void getSnapshot(Bitmap bitmap) {
+        try {
+            fileOutputStream = new FileOutputStream(LoadingImageClass.pathForImage());
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //save value in database
