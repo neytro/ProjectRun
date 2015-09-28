@@ -501,7 +501,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_DATE, getRealTime().getDate());
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SPEED, speed);
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME, getRealTime().getTime());
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD, chronometer.getText().toString());
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD, mainFragment.setPeriodTime());
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT, pathForImage);
         database.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values);
     }
