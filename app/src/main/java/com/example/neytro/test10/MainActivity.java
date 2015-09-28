@@ -157,6 +157,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
+        drawRoute(lastLocation);
         sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
         googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         googleMap.setMyLocationEnabled(true);
@@ -477,7 +478,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     //take screenshot form googleMap
-    public void getSnapshot(Bitmap bitmap) {
+    private void getSnapshot(Bitmap bitmap) {
         try {
             fileOutputStream = new FileOutputStream(LoadingImageClass.pathForImage());
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
