@@ -35,9 +35,8 @@ public class HistoryActivity extends ActionBarActivity {
         SQLiteDatabase database = myDatabase.getWritableDatabase();
         Cursor cursor = database.query(FeedReaderContract.FeedEntry.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
-        //cursor.moveToLast();
         if (cursor.getCount() >= 1) {
-            for (int i = cursor.getCount()-1; i >=0; i--) {
+            for (int i = cursor.getCount() - 1; i >= 0; i--) {
                 cursor.moveToPosition(i);
                 adapterItem.setSpeed(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_SPEED)));
                 adapterItem.setCalory(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_CALORY)));
