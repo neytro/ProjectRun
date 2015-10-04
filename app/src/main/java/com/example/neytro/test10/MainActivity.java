@@ -167,9 +167,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setRotateGesturesEnabled(true);
         uiSettings.setMapToolbarEnabled(false);
-        if (mainFragment.isMapReady()) {
+       /* if (mainFragment.isMapReady()) {
             googleMap.addMarker(new MarkerOptions().position(sydney).title("START"));
-        }
+        }*/
         this.googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             public void onMapLoaded() {
                 MainActivity.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
@@ -192,10 +192,12 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         PolylineOptions options = new PolylineOptions();
         if (coordList.size() > 1) {
             options.addAll(coordList);
-            options.width(8).color(Color.BLUE).geodesic(true).visible(true).zIndex(30);
+            options.width(10).color(Color.BLUE).geodesic(true).visible(true).zIndex(30);
             polyline = googleMap.addPolyline(options);
             polyline.setPoints(coordList);
             googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLngRoute));
+            googleMap.addMarker(new MarkerOptions().position(coordList.get(0)).title("START"));
+            googleMap.addMarker(new MarkerOptions().position(coordList.get(coordList.size() - 1)).title("META"));
         }
     }
 
@@ -335,9 +337,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 //lastLocation.set(location);
             } else {
                 drawRoute(location);
-                kilometry = (round( kilometry + lastLocation.distanceTo(location),2))/1000;
-                speed = round (location.getSpeed() * (float) 3.6,2) ;
-                calory = round(calory + calculateCalory(speed),2) ;
+                kilometry = (round(kilometry + lastLocation.distanceTo(location), 2)) / 1000;
+                speed = round(location.getSpeed() * (float) 3.6, 2);
+                calory = round(calory + calculateCalory(speed), 2);
                 mainFragment.getPredkosc(speed);
                 mainFragment.getDistance(kilometry);
                 mainFragment.getCalory(calory);
@@ -345,12 +347,14 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             }
         }
     }
+
     private float round(double f, int places) {
         float temp = (float) (f * (Math.pow(10, places)));
         temp = (Math.round(temp));
         temp = temp / (int) (Math.pow(10, places));
         return temp;
     }
+
     //reset kilometers
     public void resetKilometry() {
         kilometry = 0;
@@ -507,10 +511,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         SQLiteDatabase database = myDatabase.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID, "1");
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_CALORY, calory+" kcal");
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE, kilometry+" km");
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_CALORY, calory + " kcal");
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE, kilometry + " km");
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_DATE, getRealTime().getDate());
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SPEED, speed+" km/h");
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SPEED, speed + " km/h");
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME, getRealTime().getTime());
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD, mainFragment.setPeriodTime());
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT, pathForImage);
