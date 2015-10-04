@@ -134,16 +134,16 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
                         whichCopy = which;
                         switch (which) {
                             case 0:
-                                textViewOdleglosc.setText(String.valueOf(round(distance, 2)) + " km");
+                                textViewOdleglosc.setText(String.valueOf(distance) + " km");
                                 return;
                             case 1:
-                                textViewOdleglosc.setText(String.valueOf(round(speed, 2)) + " km/h");
+                                textViewOdleglosc.setText(String.valueOf(speed) + " km/h");
                                 return;
                             case 2:
-                                textViewOdleglosc.setText(String.valueOf(round(calory, 2)) + " kcal");
+                                textViewOdleglosc.setText(String.valueOf(calory) + " kcal");
                                 return;
                             default:
-                                textViewOdleglosc.setText(String.valueOf(round(distance, 2)) + " km");
+                                textViewOdleglosc.setText(String.valueOf(distance) + " km");
                                 return;
                         }
                     }
@@ -197,7 +197,7 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
     public void getDistance(float distance) {
         this.distance = distance;
         if (whichCopy == 0) {
-            textViewOdleglosc.setText(String.valueOf(round(distance, 2)) + " km");
+            textViewOdleglosc.setText(String.valueOf(distance) + " km");
         }
     }
 
@@ -205,7 +205,7 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
     public void getPredkosc(float speed) {
         this.speed = speed;
         if (whichCopy == 1) {
-            textViewOdleglosc.setText(String.valueOf(round(speed, 2)) + " km/h");
+            textViewOdleglosc.setText(String.valueOf(speed) + " km/h");
         }
     }
 
@@ -213,16 +213,11 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
     public void getCalory(float calory) {
         this.calory = calory;
         if (whichCopy == 2) {
-            textViewOdleglosc.setText(String.valueOf(round(calory, 2)) + " kcal");
+            textViewOdleglosc.setText(String.valueOf(calory) + " kcal");
         }
     }
 
-    private float round(double f, int places) {
-        float temp = (float) (f * (Math.pow(10, places)));
-        temp = (Math.round(temp));
-        temp = temp / (int) (Math.pow(10, places));
-        return temp;
-    }
+
 
     //start stopwatch
     public void timerStart() {
@@ -265,7 +260,7 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.setMapFragment();
         mainActivity.loadStack();
-        mainActivity.resetKilometry();
+        //mainActivity.resetKilometry();
         buttonStart.setVisibility(View.VISIBLE);
         buttonResume.setVisibility(View.INVISIBLE);
         buttonRestart.setVisibility(View.INVISIBLE);

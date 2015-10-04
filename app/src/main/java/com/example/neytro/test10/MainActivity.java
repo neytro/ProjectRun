@@ -192,7 +192,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         PolylineOptions options = new PolylineOptions();
         if (coordList.size() > 1) {
             options.addAll(coordList);
-            options.width(5).color(Color.BLUE).geodesic(true).visible(true).zIndex(30);
+            options.width(8).color(Color.BLUE).geodesic(true).visible(true).zIndex(30);
             polyline = googleMap.addPolyline(options);
             polyline.setPoints(coordList);
             googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLngRoute));
@@ -235,18 +235,22 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     //load MapFragment(for GoogleMap)
     public void setMapFragment() {
-        GoogleMapOptions options = new GoogleMapOptions();
-        options.mapType(GoogleMap.MAP_TYPE_SATELLITE)
-                .compassEnabled(false)
-                .rotateGesturesEnabled(false)
-                .tiltGesturesEnabled(false);
-        mMapFragment = MapFragment.newInstance(options);
+        mMapFragment = MapFragment.newInstance(getOption());
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.setCustomAnimations(R.animator.enter_anim, R.animator.exit_anim, R.animator.enter_anim, R.animator.exit_anim);
         fragmentTransaction.add(R.id.fragmentContainer, mMapFragment);
         fragmentTransaction.commit();
         mMapFragment.getMapAsync(this);
+    }
+
+    private GoogleMapOptions getOption() {
+        GoogleMapOptions options = new GoogleMapOptions();
+        options.mapType(GoogleMap.MAP_TYPE_SATELLITE)
+                .compassEnabled(false)
+                .rotateGesturesEnabled(false)
+                .tiltGesturesEnabled(false);
+        return options;
     }
 
     //set actionbar for main activity
@@ -331,17 +335,22 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 //lastLocation.set(location);
             } else {
                 drawRoute(location);
-                kilometry = kilometry + lastLocation.distanceTo(location);
-                speed = location.getSpeed() * (float) 3.6;
-                calory = calory + calculateCalory(speed);
+                kilometry = (round( kilometry + lastLocation.distanceTo(location),2))/1000;
+                speed = round (location.getSpeed() * (float) 3.6,2) ;
+                calory = round(calory + calculateCalory(speed),2) ;
                 mainFragment.getPredkosc(speed);
-                mainFragment.getDistance(kilometry / 1000);
+                mainFragment.getDistance(kilometry);
                 mainFragment.getCalory(calory);
                 lastLocation.set(location);
             }
         }
     }
-
+    private float round(double f, int places) {
+        float temp = (float) (f * (Math.pow(10, places)));
+        temp = (Math.round(temp));
+        temp = temp / (int) (Math.pow(10, places));
+        return temp;
+    }
     //reset kilometers
     public void resetKilometry() {
         kilometry = 0;
@@ -396,6 +405,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 getSnapshot(bitmap);
                 saveDatabase();
                 resetPeriodTime();
+                resetKilometry();
             }
         });
         alertDialog.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -497,10 +507,10 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         SQLiteDatabase database = myDatabase.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID, "1");
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_CALORY, calory);
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE, kilometry / 1000);
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_CALORY, calory+" kcal");
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE, kilometry+" km");
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_DATE, getRealTime().getDate());
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SPEED, speed);
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SPEED, speed+" km/h");
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME, getRealTime().getTime());
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD, mainFragment.setPeriodTime());
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT, pathForImage);

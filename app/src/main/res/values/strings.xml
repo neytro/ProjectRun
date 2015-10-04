@@ -1,27 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Project RUN</string>
     <string name="ignor">IGNOR</string>
     <string name="action_settings">Settings</string>
     <string name="history">History</string>
     <string name="exit">Exit</string>
-    <string name="disconnected_GoogleService">You disconnected from Google Service.</string>
-    <string name="problemConnection_GoogleService">There is some problem with connection.</string>
+    <string name="disconnected_GoogleService">You have been disconected from Google Service.</string>
+    <string name="problemConnection_GoogleService">Problem with connection</string>
     <string name="GPStitle">Inactive GPS</string>
-    <string name="GPSmessage">Please go to the settings and active GPS.</string>
+    <string name="GPSmessage">Please go to settings, and active GPS</string>
     <string name="Settings">SETTINGS</string>
-    <string name="messageExit">Do you want leave app?</string>
+    <string name="messageExit">Really?</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
+    <string name="date">Date:</string>
+    <string name="calory">Calory:</string>
+    <string name="speed">Speed:</string>
+    <string name="distance">Distance:</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="dialogTitlePicker">Please choose category</string>
+    <string name="hello_blank_fragment">Czarny ekran</string>
+    <string name="dialogTitlePicker">Choose category</string>
+    <string name="snapshot">Status has been saved to History</string>
+    <string name="empty">EMPTY</string>
     <string name="saveHistory">save to history</string>
     <string name="saveState">Do you like save state?</string>
+    <string name="clear">Please delete history</string>
+    <string name="title_usuniecie_historii">Deleting history</string>
+    <string name="time">Time:</string>
+    <string name="timePeriod">Period time:</string>
     <string-array name="dialog_list">
         <item>Distance</item>
         <item>Speed</item>
-        <item>Calories</item>
+        <item>Calory</item>
     </string-array>
-
 </resources>
