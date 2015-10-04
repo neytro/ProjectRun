@@ -104,7 +104,6 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
     @Override
     public void onDetach() {
         super.onDetach();
-
     }
 
     @Override
@@ -172,10 +171,12 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
     public boolean isMapReady() {
         return isMapReady;
     }
+
     public boolean isRestartReady() {
         return isRestartReady;
     }
-    public void setRestartFalse(){
+
+    public void setRestartFalse() {
         isRestartReady = false;
     }
 
@@ -216,8 +217,6 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
             textViewOdleglosc.setText(String.valueOf(calory) + " kcal");
         }
     }
-
-
 
     //start stopwatch
     public void timerStart() {
@@ -270,7 +269,7 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
         chronometer.stop();
         chronometer.setFormat("00:%s");
         isMapReady = false;
-        isRestartReady=true;
+        isRestartReady = true;
     }
 }
 
