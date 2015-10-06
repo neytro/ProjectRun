@@ -38,7 +38,6 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -196,8 +195,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             polyline = googleMap.addPolyline(options);
             polyline.setPoints(coordList);
             googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLngRoute));
-            googleMap.addMarker(new MarkerOptions().position(coordList.get(0)).title("START"));
-            googleMap.addMarker(new MarkerOptions().position(coordList.get(coordList.size() - 1)).title("META"));
+            //todo: check below function
+            //googleMap.addMarker(new MarkerOptions().position(coordList.get(0)).title("START"));
+            //googleMap.addMarker(new MarkerOptions().position(coordList.get(coordList.size() - 1)).title("META"));
         }
     }
 
@@ -334,6 +334,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
             updatePosition++;
             if (updatePosition == 1) {
+                //todo: check if this is needed
                 //lastLocation.set(location);
             } else {
                 drawRoute(location);

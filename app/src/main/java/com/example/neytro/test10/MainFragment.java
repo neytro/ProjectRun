@@ -194,6 +194,7 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
         progressBarRuchomy.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"), PorterDuff.Mode.MULTIPLY);
     }
 
+    //todo: add km to reseources
     //add distance
     public void getDistance(float distance) {
         this.distance = distance;
@@ -202,6 +203,7 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
         }
     }
 
+    //todo: add km/h to reseources
     //add speed
     public void getPredkosc(float speed) {
         this.speed = speed;
@@ -210,6 +212,7 @@ public class MainFragment extends Fragment implements Chronometer.OnChronometerT
         }
     }
 
+    //todo: add kcal to reseources
     //add calory
     public void getCalory(float calory) {
         this.calory = calory;

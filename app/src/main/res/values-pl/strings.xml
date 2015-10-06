@@ -18,7 +18,7 @@
     <string name="speed">Prędkość:</string>
     <string name="distance">Odległość:</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Czarny ekran</string>
     <string name="dialogTitlePicker">Wybierz kategorie</string>
     <string name="snapshot">Status został zapisany do Historii</string>

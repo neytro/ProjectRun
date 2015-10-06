@@ -18,7 +18,7 @@
     <string name="speed">Speed:</string>
     <string name="distance">Distance:</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Czarny ekran</string>
     <string name="dialogTitlePicker">Choose category</string>
     <string name="snapshot">Status has been saved to History</string>
