@@ -8,8 +8,8 @@ public class ActualTime {
     private String date;
 
     public ActualTime(String... var1) {
-        this.time = var1[0];
-        this.date = var1[1];
+        time = var1[0];
+        date = var1[1];
     }
 
     public String getTime() {
