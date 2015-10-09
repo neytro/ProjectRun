@@ -155,23 +155,23 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     //activate when map is ready
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
+    public void onMapReady(GoogleMap var1) {
+        googleMap = var1;
         drawRoute(lastLocation);
         sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-        this.googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        this.googleMap.setMyLocationEnabled(true);
-        this.googleMap.setOnMyLocationChangeListener(this);
-        this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
-        this.googleMap.getCameraPosition();
-        UiSettings uiSettings = this.googleMap.getUiSettings();
+        googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        googleMap.setMyLocationEnabled(true);
+        googleMap.setOnMyLocationChangeListener(this);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
+        googleMap.getCameraPosition();
+        UiSettings uiSettings = googleMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setRotateGesturesEnabled(true);
         uiSettings.setMapToolbarEnabled(false);
        /* if (mainFragment.isMapReady()) {
             googleMap.addMarker(new MarkerOptions().position(sydney).title("START"));
         }*/
-        this.googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             public void onMapLoaded() {
                 MainActivity.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
                     public void onSnapshotReady(Bitmap bitmap) {
