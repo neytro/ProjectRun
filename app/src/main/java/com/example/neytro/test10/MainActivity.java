@@ -342,7 +342,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 //lastLocation.set(location);
             } else {
                 //drawRoute(location);
-                kilometry = (round(kilometry + lastLocation.distanceTo(location), 2)) / 1000;
+                kilometry = round(kilometry + lastLocation.distanceTo(location) / 1000, 2);
                 speed = round(location.getSpeed() * (float) 3.6, 2);
                 calory = round(calory + calculateCalory(speed), 2);
                 mainFragment.getPredkosc(speed);
