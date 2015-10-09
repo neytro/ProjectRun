@@ -49,7 +49,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
         GpsStatus.Listener,
-        OnMapReadyCallback {
+        OnMapReadyCallback,
+        GoogleMap.OnMyLocationChangeListener {
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
@@ -158,11 +159,12 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         this.googleMap = googleMap;
         drawRoute(lastLocation);
         sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-        googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
-        googleMap.getCameraPosition();
-        UiSettings uiSettings = googleMap.getUiSettings();
+        this.googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        this.googleMap.setMyLocationEnabled(true);
+        this.googleMap.setOnMyLocationChangeListener(this);
+        this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
+        this.googleMap.getCameraPosition();
+        UiSettings uiSettings = this.googleMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setRotateGesturesEnabled(true);
         uiSettings.setMapToolbarEnabled(false);
@@ -187,7 +189,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     //draw route in google map
     public void drawRoute(Location location) {
         latLngRoute = new LatLng(location.getLatitude(), location.getLongitude());
-        coordList.add(latLngRoute);
+        if (mainFragment.ifRunnerIsReady()) {
+            coordList.add(latLngRoute);
+        }
         PolylineOptions options = new PolylineOptions();
         if (coordList.size() > 1) {
             options.addAll(coordList);
@@ -337,7 +341,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 //todo: check if this is needed
                 //lastLocation.set(location);
             } else {
-                drawRoute(location);
+                //drawRoute(location);
                 kilometry = (round(kilometry + lastLocation.distanceTo(location), 2)) / 1000;
                 speed = round(location.getSpeed() * (float) 3.6, 2);
                 calory = round(calory + calculateCalory(speed), 2);
@@ -539,6 +543,11 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         date = simpleDateFormatDate.format(c.getTime());
         ActualTime actualTime = new ActualTime(time, date);
         return actualTime;
+    }
+
+    @Override
+    public void onMyLocationChange(Location location) {
+        drawRoute(location);
     }
 }
 
