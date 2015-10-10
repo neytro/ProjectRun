@@ -15,7 +15,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageViewIcon" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" android:src="#ff2dff2e" android:layout_margin="5dp"/>
+                android:layout_alignParentStart="true"
+                android:src="#ff2dff2e"
+                android:layout_margin="5dp"
+                android:clickable="true"/>
         </LinearLayout>
         <LinearLayout
             android:orientation="vertical"

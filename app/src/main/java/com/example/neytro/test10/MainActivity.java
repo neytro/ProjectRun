@@ -184,11 +184,11 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     //draw route in google map
-    public void drawRoute(Location location) {
-        latLngRoute = new LatLng(location.getLatitude(), location.getLongitude());
+    public void drawRoute() {
+      /*  latLngRoute = new LatLng(location.getLatitude(), location.getLongitude());
         if (mainFragment.ifRunnerIsReady()) {
             coordList.add(latLngRoute);
-        }
+        }*/
         PolylineOptions options = new PolylineOptions();
         if (coordList.size() > 1) {
             options.addAll(coordList);
@@ -198,6 +198,11 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLngRoute));
             googleMap.addMarker(new MarkerOptions().position(coordList.get(0)).title("START"));
         }
+    }
+
+    public void getPoint(Location location) {
+        latLngRoute = new LatLng(location.getLatitude(), location.getLongitude());
+        coordList.add(latLngRoute);
     }
 
     //save last state of fragment
@@ -329,14 +334,16 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     //show kilometers
     private void showKilometers(Location location) {
+        //location.setSpeed(15);
         if (location != null && location.getSpeed() > (float) 0.5 && mainFragment.ifRunnerIsReady() && GPSready) {
             sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+            Toast.makeText(this, "ma lokalizacje ", Toast.LENGTH_LONG).show();
             updatePosition++;
             if (updatePosition == 1) {
                 //todo: check if this is needed
                 //lastLocation.set(location);
             } else {
-                //drawRoute(location);
+                getPoint(location);
                 kilometry = round(kilometry + lastLocation.distanceTo(location) / 1000, 2);
                 speed = round(location.getSpeed() * (float) 3.6, 2);
                 calory = round(calory + calculateCalory(speed), 2);
@@ -542,7 +549,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     @Override
     public void onMyLocationChange(Location location) {
-        drawRoute(location);
+        drawRoute();
     }
 }
 
