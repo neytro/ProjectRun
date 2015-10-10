@@ -185,17 +185,12 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     //draw route in google map
     public void drawRoute() {
-      /*  latLngRoute = new LatLng(location.getLatitude(), location.getLongitude());
-        if (mainFragment.ifRunnerIsReady()) {
-            coordList.add(latLngRoute);
-        }*/
         PolylineOptions options = new PolylineOptions();
         if (coordList.size() > 1) {
             options.addAll(coordList);
             options.width(10).color(Color.BLUE).geodesic(true).visible(true).zIndex(30);
             polyline = googleMap.addPolyline(options);
             polyline.setPoints(coordList);
-            googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLngRoute));
             googleMap.addMarker(new MarkerOptions().position(coordList.get(0)).title("START"));
         }
     }
@@ -334,7 +329,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     //show kilometers
     private void showKilometers(Location location) {
-        //location.setSpeed(15);
+        location.setSpeed(15);
         if (location != null && location.getSpeed() > (float) 0.5 && mainFragment.ifRunnerIsReady() && GPSready) {
             sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
             updatePosition++;
@@ -548,7 +543,13 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     @Override
     public void onMyLocationChange(Location location) {
+        folowGpsPosition(location);
         drawRoute();
+    }
+
+    private void folowGpsPosition(Location var1) {
+        LatLng position = new LatLng(var1.getLatitude(), var1.getLongitude());
+        googleMap.animateCamera(CameraUpdateFactory.newLatLng(position));
     }
 }
 
