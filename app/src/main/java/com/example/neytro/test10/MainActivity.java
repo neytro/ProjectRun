@@ -311,7 +311,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     //show kilometers
     private void showKilometers(Location location) {
-        location.setSpeed(15);
+        //location.setSpeed(15);
         if (location != null && location.getSpeed() > (float) 0.5 && mainFragment.ifRunnerIsReady() && GPSready) {
             sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
             updatePosition++;
