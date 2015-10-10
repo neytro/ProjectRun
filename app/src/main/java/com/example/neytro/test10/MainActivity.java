@@ -38,6 +38,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -157,7 +158,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     @Override
     public void onMapReady(GoogleMap var1) {
         googleMap = var1;
-        drawRoute(lastLocation);
         sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
         googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         googleMap.setMyLocationEnabled(true);
@@ -168,9 +168,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setRotateGesturesEnabled(true);
         uiSettings.setMapToolbarEnabled(false);
-       /* if (mainFragment.isMapReady()) {
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("START"));
-        }*/
         googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             public void onMapLoaded() {
                 MainActivity.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
@@ -199,9 +196,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             polyline = googleMap.addPolyline(options);
             polyline.setPoints(coordList);
             googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLngRoute));
-            //todo: check below function
-            //googleMap.addMarker(new MarkerOptions().position(coordList.get(0)).title("START"));
-            //googleMap.addMarker(new MarkerOptions().position(coordList.get(coordList.size() - 1)).title("META"));
+            googleMap.addMarker(new MarkerOptions().position(coordList.get(0)).title("START"));
         }
     }
 
