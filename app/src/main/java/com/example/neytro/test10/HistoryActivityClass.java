@@ -1,5 +1,6 @@
 package com.example.neytro.test10;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,7 @@ import android.widget.TextView;
 /**
  * Created by Neytro on 2015-07-17.
  */
-public class HistoryActivityClass extends ArrayAdapter<String> {
+public class HistoryActivityClass extends ArrayAdapter<String> implements View.OnClickListener {
     private Context contextList;
     AdapterItem adapterItem;
     private ViewHolder viewHolder = new ViewHolder();
@@ -36,6 +37,7 @@ public class HistoryActivityClass extends ArrayAdapter<String> {
             holder.textViewDbTime = (TextView) convertView.findViewById(R.id.textViewDbTime);
             holder.textViewDbTimePeriod = (TextView) convertView.findViewById(R.id.textViewDbTimePeriod);
             holder.imageViewIcon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
+            holder.imageViewIcon.setOnClickListener(this);
             convertView.setTag(holder);
             viewHolder = holder;
         } else {
@@ -54,6 +56,7 @@ public class HistoryActivityClass extends ArrayAdapter<String> {
 
     //keep reference for items
     static class ViewHolder {
+
         TextView textViewDbDate;
         TextView textViewDbTime;
         TextView textViewDbTimePeriod;
@@ -61,5 +64,14 @@ public class HistoryActivityClass extends ArrayAdapter<String> {
         TextView textViewDbCalory;
         TextView textViewDbSpeed;
         ImageView imageViewIcon;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.imageViewIcon:
+                Intent intent = new Intent(getContext(), ActivityZoomImage.class);
+                getContext().startActivity(intent);
+        }
     }
 }
