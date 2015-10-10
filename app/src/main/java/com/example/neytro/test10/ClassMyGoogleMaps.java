@@ -13,11 +13,11 @@ import java.util.ArrayList;
 /**
  * Created by Neytro on 2015-10-10.
  */
-public class MyGoogleMaps {
+public class ClassMyGoogleMaps {
     private GoogleMap googleMap;
     private ArrayList<LatLng> coordList = new ArrayList<LatLng>();
 
-    public MyGoogleMaps(GoogleMap var1, ArrayList<LatLng> var2) {
+    public ClassMyGoogleMaps(GoogleMap var1, ArrayList<LatLng> var2) {
         googleMap = var1;
         coordList = var2;
     }

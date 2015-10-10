@@ -6,7 +6,7 @@ import android.view.MenuItem;
 /**
  * Created by Neytro on 2015-04-03.
  */
-public class SettingsActivity extends ActionBarActivity {
+public class ActivitySettings extends ActionBarActivity {
     private ActionBar actionBar;
 
     @Override

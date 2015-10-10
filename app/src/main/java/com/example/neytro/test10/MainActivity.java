@@ -64,7 +64,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private MapFragment mMapFragment;
     private FileOutputStream fileOutputStream;
     private Chronometer chronometer;
-    private MyGoogleMaps myGoogleMap;
+    private ClassMyGoogleMaps myGoogleMap;
     private boolean GPSready = false;
     private int updatePosition = 0;
     private float calory = 0;
@@ -155,7 +155,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     //activate when map is ready
     @Override
     public void onMapReady(GoogleMap var1) {
-        myGoogleMap = new MyGoogleMaps(var1, coordList);
+        myGoogleMap = new ClassMyGoogleMaps(var1, coordList);
         googleMap = var1;
         sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
         googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
@@ -286,7 +286,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                         startActivity(intentHistory);
                         break;
                     case R.id.settings:
-                        Intent intentSettings = new Intent(getApplication(), SettingsActivity.class);
+                        Intent intentSettings = new Intent(getApplication(), ActivitySettings.class);
                         startActivity(intentSettings);
                         break;
                     case R.id.exit:
