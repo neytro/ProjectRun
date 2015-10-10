@@ -56,7 +56,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private android.support.v7.app.ActionBar actionBarMain;
     private View viewCustomActionBar;
     private View viewFragmentmain;
-    private MainFragment mainFragment = new MainFragment();
+    private FragmentMain fragmentMain = new FragmentMain();
     private ArrayList<LatLng> coordList = new ArrayList<LatLng>();
     private Polyline polyline;
     private LatLng latLngRoute;
@@ -172,9 +172,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 MainActivity.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
                     public void onSnapshotReady(Bitmap bitmap) {
                         // Write image to disk
-                        if (mainFragment.isRestartReady()) {
+                        if (fragmentMain.isRestartReady()) {
                             alertDialogMap(bitmap);
-                            mainFragment.setRestartFalse();
+                            fragmentMain.setRestartFalse();
                         }
                     }
                 });
@@ -209,11 +209,11 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         imageViewPostion.setVisibility(View.INVISIBLE);
     }
 
-    //load MainFragment
+    //load FragmentMain
     private void setMainFragment() {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragmentContainer, mainFragment).commit();
+        fragmentTransaction.add(R.id.fragmentContainer, fragmentMain).commit();
     }
 
     //load MapFragment(for GoogleMap)
@@ -312,7 +312,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     //show kilometers
     private void showKilometers(Location location) {
         location.setSpeed(15);
-        if (location != null && location.getSpeed() > (float) 0.5 && mainFragment.ifRunnerIsReady() && GPSready) {
+        if (location != null && location.getSpeed() > (float) 0.5 && fragmentMain.ifRunnerIsReady() && GPSready) {
             sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
             updatePosition++;
             if (updatePosition == 1) {
@@ -323,9 +323,9 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 kilometry = round(kilometry + lastLocation.distanceTo(location) / 1000, 2);
                 speed = round(location.getSpeed() * (float) 3.6, 2);
                 calory = round(calory + calculateCalory(speed), 2);
-                mainFragment.getPredkosc(speed);
-                mainFragment.getDistance(kilometry);
-                mainFragment.getCalory(calory);
+                fragmentMain.getPredkosc(speed);
+                fragmentMain.getDistance(kilometry);
+                fragmentMain.getCalory(calory);
                 lastLocation.set(location);
             }
         }
@@ -499,7 +499,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_DATE, getRealTime().getDate());
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SPEED, speed + " km/h");
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME, getRealTime().getTime());
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD, mainFragment.setPeriodTime());
+        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD, fragmentMain.setPeriodTime());
         values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT, pathForImage);
         database.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values);
     }

@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import static com.example.neytro.test10.R.id.textViewDistance;
-public class MainFragment extends Fragment implements Chronometer.OnChronometerTickListener {
+public class FragmentMain extends Fragment implements Chronometer.OnChronometerTickListener {
     private View viewMainFragment;
     private Button buttonRestart;
     private Button buttonStart;
