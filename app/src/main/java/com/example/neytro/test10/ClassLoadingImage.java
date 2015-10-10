@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Created by Neytro on 2015-08-16.
  */
-public class LoadingImageClass {
+public class ClassLoadingImage {
     class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
         private String url;
         private final WeakReference<ImageView> imageViewReference;

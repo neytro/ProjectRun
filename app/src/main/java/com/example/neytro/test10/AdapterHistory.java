@@ -10,13 +10,13 @@ import android.widget.TextView;
 /**
  * Created by Neytro on 2015-07-17.
  */
-public class HistoryActivityClass extends ArrayAdapter<String> implements View.OnClickListener {
+public class AdapterHistory extends ArrayAdapter<String> implements View.OnClickListener {
     private Context contextList;
     AdapterItem adapterItem;
     private ViewHolder viewHolder = new ViewHolder();
-    private LoadingImageClass loader = new LoadingImageClass();
+    private ClassLoadingImage loader = new ClassLoadingImage();
 
-    public HistoryActivityClass(Context context, int resource, AdapterItem adapter) {
+    public AdapterHistory(Context context, int resource, AdapterItem adapter) {
         super(context, resource, adapter.getCalory());
         contextList = context;
         adapterItem = adapter;

@@ -43,7 +43,7 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
+public class ActivityMain extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
         GpsStatus.Listener,
@@ -169,7 +169,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         uiSettings.setMapToolbarEnabled(false);
         googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             public void onMapLoaded() {
-                MainActivity.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                ActivityMain.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
                     public void onSnapshotReady(Bitmap bitmap) {
                         // Write image to disk
                         if (fragmentMain.isRestartReady()) {
@@ -282,7 +282,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.history:
-                        Intent intentHistory = new Intent(getApplication(), HistoryActivity.class);
+                        Intent intentHistory = new Intent(getApplication(), ActivityHistory.class);
                         startActivity(intentHistory);
                         break;
                     case R.id.settings:
@@ -477,7 +477,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     //take screenshot form googleMap
     private void getSnapshot(Bitmap bitmap) {
         try {
-            fileOutputStream = new FileOutputStream(LoadingImageClass.pathForImage());
+            fileOutputStream = new FileOutputStream(ClassLoadingImage.pathForImage());
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
             fileOutputStream.flush();
             fileOutputStream.close();
@@ -488,20 +488,20 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     //save value in database
     private void saveDatabase() {
-        String pathForImage = LoadingImageClass.pathForImage().getAbsolutePath();
+        String pathForImage = ClassLoadingImage.pathForImage().getAbsolutePath();
         chronometer = (Chronometer) findViewById(R.id.chronometer);
-        FeedReaderDbHelper myDatabase = new FeedReaderDbHelper(this);
+        ClassFeedReaderDbHelper myDatabase = new ClassFeedReaderDbHelper(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID, "1");
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_CALORY, calory + " kcal");
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE, kilometry + " km");
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_DATE, getRealTime().getDate());
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SPEED, speed + " km/h");
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME, getRealTime().getTime());
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD, fragmentMain.setPeriodTime());
-        values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT, pathForImage);
-        database.insert(FeedReaderContract.FeedEntry.TABLE_NAME, null, values);
+        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID, "1");
+        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_CALORY, calory + " kcal");
+        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE, kilometry + " km");
+        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DATE, getRealTime().getDate());
+        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SPEED, speed + " km/h");
+        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME, getRealTime().getTime());
+        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD, fragmentMain.setPeriodTime());
+        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT, pathForImage);
+        database.insert(ClassFeedReaderContract.FeedEntry.TABLE_NAME, null, values);
     }
 
     private void resetPeriodTime() {
@@ -511,7 +511,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     }
 
     //get real time
-    private ActualTime getRealTime() {
+    private ClassActualTime getRealTime() {
         String time;
         String date;
         Calendar c = Calendar.getInstance();
@@ -519,8 +519,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("yyyy-MM-dd");
         time = simpleDateFormatTime.format(c.getTime());
         date = simpleDateFormatDate.format(c.getTime());
-        ActualTime actualTime = new ActualTime(time, date);
-        return actualTime;
+        ClassActualTime classActualTime = new ClassActualTime(time, date);
+        return classActualTime;
     }
 
     @Override

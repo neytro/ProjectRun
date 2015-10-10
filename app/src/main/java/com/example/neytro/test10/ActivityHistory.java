@@ -14,7 +14,7 @@ import android.widget.TextView;
 /**
  * Created by Neytro on 2015-04-03.
  */
-public class HistoryActivity extends ActionBarActivity {
+public class ActivityHistory extends ActionBarActivity {
     private ActionBar actionBar;
     private ListView listViewAdapter;
     private AdapterItem adapterItem;
@@ -31,20 +31,20 @@ public class HistoryActivity extends ActionBarActivity {
     //read value from database
     private void readData() {
         adapterItem = new AdapterItem();
-        FeedReaderDbHelper myDatabase = new FeedReaderDbHelper(this);
+        ClassFeedReaderDbHelper myDatabase = new ClassFeedReaderDbHelper(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
-        Cursor cursor = database.query(FeedReaderContract.FeedEntry.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = database.query(ClassFeedReaderContract.FeedEntry.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
         if (cursor.getCount() >= 1) {
             for (int i = cursor.getCount() - 1; i >= 0; i--) {
                 cursor.moveToPosition(i);
-                adapterItem.setSpeed(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_SPEED)));
-                adapterItem.setCalory(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_CALORY)));
-                adapterItem.setDate(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_DATE)));
-                adapterItem.setDistance(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE)));
-                adapterItem.setTime(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME)));
-                adapterItem.setTimePeriod(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD)));
-                adapterItem.setImage(cursor.getString(cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT)));
+                adapterItem.setSpeed(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SPEED)));
+                adapterItem.setCalory(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_CALORY)));
+                adapterItem.setDate(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DATE)));
+                adapterItem.setDistance(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE)));
+                adapterItem.setTime(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME)));
+                adapterItem.setTimePeriod(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD)));
+                adapterItem.setImage(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT)));
             }
         }
     }
@@ -55,7 +55,7 @@ public class HistoryActivity extends ActionBarActivity {
             TextView textViewInfo = (TextView) findViewById(R.id.textViewInfo);
             textViewInfo.setText(getString(R.string.empty));
         } else {
-            HistoryActivityClass hisotyrActivityClass = new HistoryActivityClass(this, R.layout.activity_history_array_list, adapterItem);
+            AdapterHistory hisotyrActivityClass = new AdapterHistory(this, R.layout.activity_history_array_list, adapterItem);
             listViewAdapter = (ListView) findViewById(R.id.listViewAdapter);
             listViewAdapter.setAdapter(hisotyrActivityClass);
         }
@@ -108,9 +108,9 @@ public class HistoryActivity extends ActionBarActivity {
 
     //clear database
     private void clearData() {
-        FeedReaderDbHelper myDatabase = new FeedReaderDbHelper(this);
+        ClassFeedReaderDbHelper myDatabase = new ClassFeedReaderDbHelper(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
-        database.delete(FeedReaderContract.FeedEntry.TABLE_NAME, null, null);
+        database.delete(ClassFeedReaderContract.FeedEntry.TABLE_NAME, null, null);
         listViewAdapter.setAdapter(null);
     }
 }

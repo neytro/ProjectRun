@@ -259,10 +259,10 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
 
     //restart stopwatch
     private void timerRestart() {
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.setMapFragment();
-        mainActivity.loadStack();
-        //mainActivity.resetKilometry();
+        ActivityMain activityMain = (ActivityMain) getActivity();
+        activityMain.setMapFragment();
+        activityMain.loadStack();
+        //activityMain.resetKilometry();
         buttonStart.setVisibility(View.VISIBLE);
         buttonResume.setVisibility(View.INVISIBLE);
         buttonRestart.setVisibility(View.INVISIBLE);

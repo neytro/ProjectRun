@@ -5,27 +5,27 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by Neytro on 2015-07-20.
  */
-public class FeedReaderDbHelper extends SQLiteOpenHelper {
+public class ClassFeedReaderDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "FeedReader.db";
     private static final String TEXT_TYPE = " TEXT";
     private static final String COMMA_SEP = ",";
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE IF NOT EXISTS " + FeedReaderContract.FeedEntry.TABLE_NAME + " (" +
-                    FeedReaderContract.FeedEntry._ID + " INTEGER PRIMARY KEY," +
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_TIME + TEXT_TYPE + COMMA_SEP +
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE + TEXT_TYPE + COMMA_SEP +
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_DATE + TEXT_TYPE + COMMA_SEP +
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_CALORY + TEXT_TYPE + COMMA_SEP +
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_SPEED + TEXT_TYPE + COMMA_SEP +
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT + TEXT_TYPE + COMMA_SEP +
-                    FeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD + TEXT_TYPE +
+            "CREATE TABLE IF NOT EXISTS " + ClassFeedReaderContract.FeedEntry.TABLE_NAME + " (" +
+                    ClassFeedReaderContract.FeedEntry._ID + " INTEGER PRIMARY KEY," +
+                    ClassFeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
+                    ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME + TEXT_TYPE + COMMA_SEP +
+                    ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE + TEXT_TYPE + COMMA_SEP +
+                    ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DATE + TEXT_TYPE + COMMA_SEP +
+                    ClassFeedReaderContract.FeedEntry.COLUMN_NAME_CALORY + TEXT_TYPE + COMMA_SEP +
+                    ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SPEED + TEXT_TYPE + COMMA_SEP +
+                    ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT + TEXT_TYPE + COMMA_SEP +
+                    ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD + TEXT_TYPE +
                     " )";
     private static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + FeedReaderContract.FeedEntry.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + ClassFeedReaderContract.FeedEntry.TABLE_NAME;
 
-    public FeedReaderDbHelper(Context context) {
+    public ClassFeedReaderDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
