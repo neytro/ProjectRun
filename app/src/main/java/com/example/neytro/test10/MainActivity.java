@@ -337,7 +337,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         //location.setSpeed(15);
         if (location != null && location.getSpeed() > (float) 0.5 && mainFragment.ifRunnerIsReady() && GPSready) {
             sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-            Toast.makeText(this, "ma lokalizacje ", Toast.LENGTH_LONG).show();
             updatePosition++;
             if (updatePosition == 1) {
                 //todo: check if this is needed
