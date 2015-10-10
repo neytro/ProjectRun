@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
@@ -38,9 +37,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -67,6 +64,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     private MapFragment mMapFragment;
     private FileOutputStream fileOutputStream;
     private Chronometer chronometer;
+    private MyGoogleMaps myGoogleMap;
     private boolean GPSready = false;
     private int updatePosition = 0;
     private float calory = 0;
@@ -157,6 +155,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     //activate when map is ready
     @Override
     public void onMapReady(GoogleMap var1) {
+        myGoogleMap = new MyGoogleMaps(var1, coordList);
         googleMap = var1;
         sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
         googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
@@ -181,23 +180,6 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 });
             }
         });
-    }
-
-    //draw route in google map
-    public void drawRoute() {
-        PolylineOptions options = new PolylineOptions();
-        if (coordList.size() > 1) {
-            options.addAll(coordList);
-            options.width(10).color(Color.BLUE).geodesic(true).visible(true).zIndex(30);
-            polyline = googleMap.addPolyline(options);
-            polyline.setPoints(coordList);
-            googleMap.addMarker(new MarkerOptions().position(coordList.get(0)).title("START"));
-        }
-    }
-
-    public void getPoint(Location location) {
-        latLngRoute = new LatLng(location.getLatitude(), location.getLongitude());
-        coordList.add(latLngRoute);
     }
 
     //save last state of fragment
@@ -337,7 +319,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
                 //todo: check if this is needed
                 //lastLocation.set(location);
             } else {
-                getPoint(location);
+                myGoogleMap.getPoint(location);
                 kilometry = round(kilometry + lastLocation.distanceTo(location) / 1000, 2);
                 speed = round(location.getSpeed() * (float) 3.6, 2);
                 calory = round(calory + calculateCalory(speed), 2);
@@ -543,13 +525,8 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
     @Override
     public void onMyLocationChange(Location location) {
-        folowGpsPosition(location);
-        drawRoute();
-    }
-
-    private void folowGpsPosition(Location var1) {
-        LatLng position = new LatLng(var1.getLatitude(), var1.getLongitude());
-        googleMap.animateCamera(CameraUpdateFactory.newLatLng(position));
+        myGoogleMap.folowGpsPosition(location);
+        myGoogleMap.drawRoute();
     }
 }
 
