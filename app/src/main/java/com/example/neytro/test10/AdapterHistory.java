@@ -10,9 +10,10 @@ import android.widget.TextView;
 /**
  * Created by Neytro on 2015-07-17.
  */
-public class AdapterHistory extends ArrayAdapter<String> implements View.OnClickListener {
+public class AdapterHistory extends ArrayAdapter<String> {
+    public static final String TAG = "view";
     private Context contextList;
-    AdapterItem adapterItem;
+    private AdapterItem adapterItem;
     private ViewHolder viewHolder = new ViewHolder();
     private ClassLoadingImage loader = new ClassLoadingImage();
 
@@ -24,8 +25,8 @@ public class AdapterHistory extends ArrayAdapter<String> implements View.OnClick
 
     //set items in listview
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+    public View getView(final int position, View convertView, final ViewGroup parent) {
+        final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
             LayoutInflater layoutInflater = LayoutInflater.from(contextList);
@@ -37,14 +38,23 @@ public class AdapterHistory extends ArrayAdapter<String> implements View.OnClick
             holder.textViewDbTime = (TextView) convertView.findViewById(R.id.textViewDbTime);
             holder.textViewDbTimePeriod = (TextView) convertView.findViewById(R.id.textViewDbTimePeriod);
             holder.imageViewIcon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
-            holder.imageViewIcon.setOnClickListener(this);
             convertView.setTag(holder);
             viewHolder = holder;
         } else {
             holder = (ViewHolder) convertView.getTag();
             viewHolder = holder;
         }
-        loader.loadImage(adapterItem.getImage().get(position), holder.imageViewIcon);
+        holder.imageViewIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //open activity with zoom Image
+                String path = adapterItem.getImage().get(position);
+                Intent intent = new Intent(getContext(), ActivityZoomImage.class);
+                intent.putExtra(TAG, path);
+                getContext().startActivity(intent);
+            }
+        });
+        loader.loadImage(adapterItem.getImage().get(position), holder.imageViewIcon, 100, 100);
         holder.textViewDbDate.setText(adapterItem.getDate().get(position));
         holder.textViewDbDistance.setText(adapterItem.getDistance().get(position));
         holder.textViewDbCalory.setText(adapterItem.getCalory().get(position));
@@ -56,7 +66,6 @@ public class AdapterHistory extends ArrayAdapter<String> implements View.OnClick
 
     //keep reference for items
     static class ViewHolder {
-
         TextView textViewDbDate;
         TextView textViewDbTime;
         TextView textViewDbTimePeriod;
@@ -64,14 +73,5 @@ public class AdapterHistory extends ArrayAdapter<String> implements View.OnClick
         TextView textViewDbCalory;
         TextView textViewDbSpeed;
         ImageView imageViewIcon;
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.imageViewIcon:
-                Intent intent = new Intent(getContext(), ActivityZoomImage.class);
-                getContext().startActivity(intent);
-        }
     }
 }

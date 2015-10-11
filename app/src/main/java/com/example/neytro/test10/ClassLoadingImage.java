@@ -16,9 +16,12 @@ import java.util.Date;
  * Created by Neytro on 2015-08-16.
  */
 public class ClassLoadingImage {
+    private int reqWidth;
+    private int reqHeight;
     class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
         private String url;
         private final WeakReference<ImageView> imageViewReference;
+
 
         public BitmapDownloaderTask(ImageView imageView) {
             imageViewReference = new WeakReference<ImageView>(imageView);
@@ -28,7 +31,7 @@ public class ClassLoadingImage {
         // Actual download method, run in the task thread
         protected Bitmap doInBackground(String... params) {
             // params comes from the execute() call: params[0] is the url.
-            return loadBitmap(params[0], 100, 100);
+            return loadBitmap(params[0], reqWidth, reqHeight);
         }
 
         @Override
@@ -73,7 +76,9 @@ public class ClassLoadingImage {
         }
     }
 
-    public void loadImage(String url, ImageView imageView) {
+    public void loadImage(String url, ImageView imageView, int width, int hight) {
+        reqWidth = width;
+        reqHeight = hight;
         if (cancelPotentialDownload(url, imageView)) {
             BitmapDownloaderTask task = new BitmapDownloaderTask(imageView);
             DownloadedDrawable downloadedDrawable = new DownloadedDrawable(task);
