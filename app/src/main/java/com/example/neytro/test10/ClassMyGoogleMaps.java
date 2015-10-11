@@ -5,6 +5,7 @@ import android.location.Location;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -43,5 +44,15 @@ public class ClassMyGoogleMaps {
     public void folowGpsPosition(Location var1) {
         LatLng position = new LatLng(var1.getLatitude(), var1.getLongitude());
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(position));
+    }
+
+    public void centerCamera() {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        if (coordList.size() >= 1) {
+            for (LatLng points : coordList) {
+                builder.include(points);
+            }
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
+        }
     }
 }

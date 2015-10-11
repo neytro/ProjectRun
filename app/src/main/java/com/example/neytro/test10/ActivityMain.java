@@ -161,25 +161,30 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         googleMap.setMyLocationEnabled(true);
         googleMap.setOnMyLocationChangeListener(this);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 16));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 14));
         googleMap.getCameraPosition();
         UiSettings uiSettings = googleMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setRotateGesturesEnabled(true);
         uiSettings.setMapToolbarEnabled(false);
-        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            public void onMapLoaded() {
-                ActivityMain.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                    public void onSnapshotReady(Bitmap bitmap) {
-                        // Write image to disk
-                        if (fragmentMain.isRestartReady()) {
+        if (fragmentMain.isRestartReady()) {
+            googleMap.setOnMyLocationChangeListener(null);
+            myGoogleMap.drawRoute();
+            myGoogleMap.centerCamera();
+            googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                public void onMapLoaded() {
+                    ActivityMain.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                        public void onSnapshotReady(Bitmap bitmap) {
+                            // Write image to disk
                             alertDialogMap(bitmap);
                             fragmentMain.setRestartFalse();
+
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        }
+
     }
 
     //save last state of fragment
@@ -311,6 +316,7 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
 
     //show kilometers
     private void showKilometers(Location location) {
+        //todo: value for testing
         location.setSpeed(15);
         if (location != null && location.getSpeed() > (float) 0.5 && fragmentMain.ifRunnerIsReady() && GPSready) {
             sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
