@@ -67,11 +67,14 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     private FileOutputStream fileOutputStream;
     private Chronometer chronometer;
     private ClassMyGoogleMaps myGoogleMap;
-    private boolean GPSready = false;
-    private int updatePosition = 0;
+    private ImageView imageViewPosition;
+    private ImageView imageViewOverflow;
+    private ImageView imageViewMap;
+    private boolean isGPSready = false;
+    private int numberOfLocationPoint = 0;
     private float calory = 0;
     private float speed = 0;
-    private float kilometry = 0;
+    private float kilometers = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,13 +101,13 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
                 switch (v.getId()) {
                     case R.id.imageView_position:
                         setMapFragment();
-                        loadStack();
+                        hidePositionImageAndShowMapImage();
                         break;
                     case R.id.imageView_overflow:
                         setOnPupMenu(v);
                         break;
                     case R.id.imageView_map:
-                        backStack();
+                        saveLastViewOfFragment();
                         break;
                 }
             }
@@ -123,17 +126,163 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     private void setListeners(View.OnClickListener listener) {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         viewCustomActionBar = layoutInflater.inflate(R.layout.custom_actionbar, null);
-        ImageView imageViewPostion = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_position);
-        ImageView imageViewOverflow = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_overflow);
-        ImageView imageViewMap = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_map);
+        imageViewPosition = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_position);
+        imageViewOverflow = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_overflow);
+        imageViewMap = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_map);
         imageViewMap.setOnClickListener(listener);
         imageViewOverflow.setOnClickListener(listener);
-        imageViewPostion.setOnClickListener(listener);
+        imageViewPosition.setOnClickListener(listener);
     }
 
     private void displayActionBar() {
         actionBarMain.setCustomView(viewCustomActionBar);
         actionBarMain.setDisplayShowCustomEnabled(true);
+    }
+
+    //load MapFragment(for GoogleMap)
+    public void setMapFragment() {
+        mMapFragment = MapFragment.newInstance(getOption());
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.setCustomAnimations(R.animator.enter_anim, R.animator.exit_anim, R.animator.enter_anim, R.animator.exit_anim);
+        fragmentTransaction.add(R.id.fragmentContainer, mMapFragment);
+        fragmentTransaction.commit();
+        mMapFragment.getMapAsync(this);
+    }
+
+    //load last state of fragment
+    public void hidePositionImageAndShowMapImage() {
+        imageViewMap.setVisibility(View.VISIBLE);
+        imageViewPosition.setVisibility(View.INVISIBLE);
+    }
+
+    //add menu to image in actionbar
+    private void setOnPupMenu(View view) {
+        Context context = getApplicationContext();
+        PopupMenu popup = new PopupMenu(context, view);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.history:
+                        showHistory();
+                        break;
+                    case R.id.settings:
+                        showSettings();
+                        break;
+                    case R.id.exit:
+                        System.exit(1);
+                        break;
+                }
+                return false;
+            }
+        });
+        MenuInflater menuInflater = popup.getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, popup.getMenu());
+        popup.show();
+    }
+
+    private void showHistory() {
+        Intent intentHistory = new Intent(getApplication(), ActivityHistory.class);
+        startActivity(intentHistory);
+    }
+
+    private void showSettings() {
+        Intent intentSettings = new Intent(getApplication(), ActivitySettings.class);
+        startActivity(intentSettings);
+    }
+
+    //save last state of fragment
+    private void saveLastViewOfFragment() {
+        imageViewMap.setVisibility(View.INVISIBLE);
+        imageViewPosition.setVisibility(View.VISIBLE);
+        getFragmentManager().popBackStack();
+    }
+
+    private void connectGoogleService() {
+        googleApiClient = new GoogleApiClient.Builder(this).
+                addConnectionCallbacks(this).
+                addOnConnectionFailedListener(this).
+                addApi(LocationServices.API).build();
+        googleApiClient.connect();
+    }
+
+    //activate when GoogleService is connected
+    @Override
+    public void onConnected(Bundle bundle) {
+        checkGPSsettings();
+        createLocationRequest();
+        getLastLocation();
+        startLocationUpdates();
+    }
+
+    //show this dialog when gps is off.
+    private void checkGPSsettings() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.addGpsStatusListener(this);
+        boolean isGpsOn = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!isGpsOn) {
+            alertDialogGps();
+        }
+    }
+
+    //dialog for gps off.
+    private void alertDialogGps() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
+        alertDialog.setTitle(getString(R.string.GPStitle));
+        alertDialog.setMessage(getString(R.string.GPSmessage));
+        alertDialog.setPositiveButton(getString(R.string.Settings), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+        });
+        alertDialog.setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                System.exit(1);
+                stopLocationUpdates();
+            }
+        });
+        alertDialog.setNeutralButton(getString(R.string.ignor), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void createLocationRequest() {
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    private void getLastLocation() {
+        lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+    }
+
+    private void startLocationUpdates() {
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                googleApiClient, locationRequest, this);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        calculateValues(location);
+    }
+
+    //activate when connection to the GoogleService was suspended
+    @Override
+    public void onConnectionSuspended(int i) {
+        showMessageConnectionSuspended();
+    }
+
+    //activate when connection to the GoogleService is failed
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        showMessageConnectionFailed();
     }
 
     @Override
@@ -156,40 +305,13 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         super.onStop();
     }
 
-    //activate when GoogleService is connected
-    @Override
-    public void onConnected(Bundle bundle) {
-        checkGPSsettings();
-        createLocationRequest();
-        calculatePosition();
-        startLocationUpdates();
-    }
-
-    //activate when connection to the GoogleService was supended
-    @Override
-    public void onConnectionSuspended(int i) {
-        showMessageConnectionSuspended();
-    }
-
-    //activate when connection to the GoogleService is failed
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        showMessageConnectionFailed();
-    }
-
-    //activate when location of the user have been changed
-    @Override
-    public void onLocationChanged(Location location) {
-        showKilometers(location);
-    }
-
     //activate when gps is set off.
     @Override
     public void onGpsStatusChanged(int event) {
         switch (event) {
             case GpsStatus.GPS_EVENT_STARTED:
                 Toast.makeText(this, "gps ready", Toast.LENGTH_LONG).show();
-                GPSready = true;
+                isGPSready = true;
                 break;
             case GpsStatus.GPS_EVENT_STOPPED:
                 startLocationUpdates();
@@ -201,8 +323,7 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
-            ImageView imageView = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_overflow);
-            setOnPupMenu(imageView);
+            setOnPupMenu(imageViewOverflow);
         }
         return super.onKeyUp(keyCode, event);
     }
@@ -246,36 +367,8 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         if (count == 0) {
             alertDialogExit();
         } else {
-            backStack();
+            saveLastViewOfFragment();
         }
-    }
-
-    //save last state of fragment
-    private void backStack() {
-        final ImageView imageViewPostion = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_position);
-        final ImageView imageViewMap = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_map);
-        imageViewMap.setVisibility(View.INVISIBLE);
-        imageViewPostion.setVisibility(View.VISIBLE);
-        getFragmentManager().popBackStack();
-    }
-
-    //load last state of fragment
-    public void loadStack() {
-        final ImageView imageViewPostion = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_position);
-        final ImageView imageViewMap = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_map);
-        imageViewMap.setVisibility(View.VISIBLE);
-        imageViewPostion.setVisibility(View.INVISIBLE);
-    }
-
-    //load MapFragment(for GoogleMap)
-    public void setMapFragment() {
-        mMapFragment = MapFragment.newInstance(getOption());
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.setCustomAnimations(R.animator.enter_anim, R.animator.exit_anim, R.animator.enter_anim, R.animator.exit_anim);
-        fragmentTransaction.add(R.id.fragmentContainer, mMapFragment);
-        fragmentTransaction.commit();
-        mMapFragment.getMapAsync(this);
     }
 
     private GoogleMapOptions getOption() {
@@ -287,34 +380,6 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         return options;
     }
 
-    //add menu to image in actionbar
-    private void setOnPupMenu(View view) {
-        Context context = getApplicationContext();
-        PopupMenu popup = new PopupMenu(context, view);
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.history:
-                        Intent intentHistory = new Intent(getApplication(), ActivityHistory.class);
-                        startActivity(intentHistory);
-                        break;
-                    case R.id.settings:
-                        Intent intentSettings = new Intent(getApplication(), ActivitySettings.class);
-                        startActivity(intentSettings);
-                        break;
-                    case R.id.exit:
-                        System.exit(1);
-                        break;
-                }
-                return false;
-            }
-        });
-        MenuInflater menuInflater = popup.getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, popup.getMenu());
-        popup.show();
-    }
-
     //show toast when connection to GoogleMap was failed
     private void showMessageConnectionFailed() {
         Context context = getApplicationContext();
@@ -324,25 +389,44 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     }
 
     //show kilometers
-    private void showKilometers(Location location) {
-        float speedInKilometers;
+    private void calculateValues(Location location) {
         //todo: value for testing
         location.setSpeed(15);
-        if (location != null && location.getSpeed() > MIN_SPEED && fragmentMain.isRunnerReady() && GPSready) {
+        if (location != null && location.getSpeed() > MIN_SPEED && fragmentMain.isButtonStartClicked() && isGPSready) {
             coordinates = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-            updatePosition++;
-            if (updatePosition != 1) {
-                speedInKilometers = location.getSpeed() * KILOMETER_FACTOR;
+            numberOfLocationPoint++;
+            if (numberOfLocationPoint != 1) {
                 myGoogleMap.getPoint(location);
-                kilometry = round(kilometry + lastLocation.distanceTo(location) / 1000, 2);
-                speed = round(speedInKilometers, 2);
-                calory = round(calory + calculateCalory(speed), 2);
-                fragmentMain.getPredkosc(speed);
-                fragmentMain.getDistance(kilometry);
-                fragmentMain.getCalory(calory);
+                calculateKilometers(location);
+                calculateSpeedAndCalory(location);
                 lastLocation.set(location);
             }
         }
+    }
+
+    private void calculateKilometers(Location location) {
+        kilometers = round(kilometers + lastLocation.distanceTo(location) / 1000, 2);
+        fragmentMain.getDistance(kilometers);
+    }
+
+    private void calculateSpeedAndCalory(Location location) {
+        float speedInKilometers = location.getSpeed() * KILOMETER_FACTOR;
+        speed = round(speedInKilometers, 2);
+        fragmentMain.getPredkosc(speed);
+        calculateCalory(speed);
+    }
+
+    private void calculateCalory(float speed) {
+        float wynik = 0;
+        if (speed < 5) {
+            wynik = WALK;
+        } else if (speed < 10) {
+            wynik = RUN;
+        } else if (speed > 10) {
+            wynik = FAST_RUN;
+        }
+        calory = round(calory + wynik, 2);
+        fragmentMain.getCalory(calory);
     }
 
     private float round(double f, int places) {
@@ -354,21 +438,8 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
 
     //reset kilometers
     public void resetKilometry() {
-        kilometry = 0;
+        kilometers = 0;
         calory = 0;
-    }
-
-    //calculate burned calory
-    private float calculateCalory(float speed) {
-        float wynik = 0;
-        if (speed < 5) {
-            wynik = WALK;
-        } else if (speed < 10) {
-            wynik = RUN;
-        } else if (speed > 10) {
-            wynik = FAST_RUN;
-        }
-        return wynik;
     }
 
     //show toast when connection to GoogleMap was susspended
@@ -418,74 +489,10 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         alertDialog.show();
     }
 
-    //connect to the Google Services
-    private void connectGoogleService() {
-        googleApiClient = new GoogleApiClient.Builder(this).
-                addConnectionCallbacks(this).
-                addOnConnectionFailedListener(this).
-                addApi(LocationServices.API).build();
-        googleApiClient.connect();
-    }
-
-    //calculate last know position on Map
-    private void calculatePosition() {
-        lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-    }
-
-    //add setting to the Google Services
-    private void createLocationRequest() {
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(5000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-
-    //start Location update
-    private void startLocationUpdates() {
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                googleApiClient, locationRequest, this);
-    }
-
     //stop Location update
     private void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 googleApiClient, this);
-    }
-
-    //show this dialog when gps is off.
-    private void checkGPSsettings() {
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationManager.addGpsStatusListener(this);
-        boolean isGpsOn = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!isGpsOn) {
-            alertDialogGps();
-        }
-    }
-
-    //dialog for gps off.
-    private void alertDialogGps() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
-        alertDialog.setTitle(getString(R.string.GPStitle));
-        alertDialog.setMessage(getString(R.string.GPSmessage));
-        alertDialog.setPositiveButton(getString(R.string.Settings), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-            }
-        });
-        alertDialog.setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                System.exit(1);
-                stopLocationUpdates();
-            }
-        });
-        alertDialog.setNeutralButton(getString(R.string.ignor), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        alertDialog.show();
     }
 
     //take screenshot form googleMap
@@ -510,7 +517,7 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         ContentValues values = new ContentValues();
         values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID, "1");
         values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_CALORY, calory + " kcal");
-        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE, kilometry + " km");
+        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE, kilometers + " km");
         values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DATE, getRealTime().getDate());
         values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SPEED, speed + " km/h");
         values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME, getRealTime().getTime());

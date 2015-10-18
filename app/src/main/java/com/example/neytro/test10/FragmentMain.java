@@ -164,7 +164,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
     }
 
     //check if stopwatch is ready
-    public boolean isRunnerReady() {
+    public boolean isButtonStartClicked() {
         return isRunnerReady;
     }
 
@@ -258,7 +258,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
     private void timerRestart() {
         ActivityMain activityMain = (ActivityMain) getActivity();
         activityMain.setMapFragment();
-        activityMain.loadStack();
+        activityMain.hidePositionImageAndShowMapImage();
         buttonStart.setVisibility(View.VISIBLE);
         buttonResume.setVisibility(View.INVISIBLE);
         buttonRestart.setVisibility(View.INVISIBLE);
