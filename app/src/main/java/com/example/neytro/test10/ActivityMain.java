@@ -37,7 +37,6 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
 
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -49,6 +48,11 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         GpsStatus.Listener,
         OnMapReadyCallback,
         GoogleMap.OnMyLocationChangeListener {
+    private final float MIN_SPEED = (float) 0.5;
+    private final float KILOMETER_FACTOR = (float) 3.6;
+    private final float WALK = (float) 0.23;
+    private final float FAST_RUN = (float) 0.75;
+    private final float RUN = (float) 0.83;
     private GoogleMap googleMap;
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
@@ -57,10 +61,8 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     private View viewCustomActionBar;
     private View viewFragmentmain;
     private FragmentMain fragmentMain = new FragmentMain();
-    private ArrayList<LatLng> coordList = new ArrayList<LatLng>();
-    private Polyline polyline;
-    private LatLng latLngRoute;
-    private LatLng sydney;
+    private ArrayList<LatLng> coordinateList = new ArrayList<LatLng>();
+    private LatLng coordinates;
     private MapFragment mMapFragment;
     private FileOutputStream fileOutputStream;
     private Chronometer chronometer;
@@ -79,6 +81,59 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         setMainFragment();
         setCustomActionBar();
         connectGoogleService();
+    }
+
+    //load FragmentMain
+    private void setMainFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.fragmentContainer, fragmentMain).commit();
+    }
+
+    //set actionbar for main activity
+    private void setCustomActionBar() {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.imageView_position:
+                        setMapFragment();
+                        loadStack();
+                        break;
+                    case R.id.imageView_overflow:
+                        setOnPupMenu(v);
+                        break;
+                    case R.id.imageView_map:
+                        backStack();
+                        break;
+                }
+            }
+        };
+        setOptionForActionBar();
+        setListeners(listener);
+        displayActionBar();
+    }
+
+    private void setOptionForActionBar() {
+        actionBarMain = getSupportActionBar();
+        actionBarMain.setDisplayShowHomeEnabled(false);
+        actionBarMain.setDisplayShowTitleEnabled(false);
+    }
+
+    private void setListeners(View.OnClickListener listener) {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        viewCustomActionBar = layoutInflater.inflate(R.layout.custom_actionbar, null);
+        ImageView imageViewPostion = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_position);
+        ImageView imageViewOverflow = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_overflow);
+        ImageView imageViewMap = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_map);
+        imageViewMap.setOnClickListener(listener);
+        imageViewOverflow.setOnClickListener(listener);
+        imageViewPostion.setOnClickListener(listener);
+    }
+
+    private void displayActionBar() {
+        actionBarMain.setCustomView(viewCustomActionBar);
+        actionBarMain.setDisplayShowCustomEnabled(true);
     }
 
     @Override
@@ -155,13 +210,13 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     //activate when map is ready
     @Override
     public void onMapReady(GoogleMap var1) {
-        myGoogleMap = new ClassMyGoogleMaps(var1, coordList);
+        myGoogleMap = new ClassMyGoogleMaps(var1, coordinateList);
         googleMap = var1;
-        sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+        coordinates = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
         googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         googleMap.setMyLocationEnabled(true);
         googleMap.setOnMyLocationChangeListener(this);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 14));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 14));
         googleMap.getCameraPosition();
         UiSettings uiSettings = googleMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
@@ -178,13 +233,11 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
                             // Write image to disk
                             alertDialogMap(bitmap);
                             fragmentMain.setRestartFalse();
-
                         }
                     });
                 }
             });
         }
-
     }
 
     //save last state of fragment
@@ -214,13 +267,6 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         imageViewPostion.setVisibility(View.INVISIBLE);
     }
 
-    //load FragmentMain
-    private void setMainFragment() {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragmentContainer, fragmentMain).commit();
-    }
-
     //load MapFragment(for GoogleMap)
     public void setMapFragment() {
         mMapFragment = MapFragment.newInstance(getOption());
@@ -239,43 +285,6 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
                 .rotateGesturesEnabled(false)
                 .tiltGesturesEnabled(false);
         return options;
-    }
-
-    //set actionbar for main activity
-    private void setCustomActionBar() {
-        actionBarMain = getSupportActionBar();
-        actionBarMain.setDisplayShowHomeEnabled(false);
-        actionBarMain.setDisplayShowTitleEnabled(false);
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-        viewCustomActionBar = layoutInflater.inflate(R.layout.custom_actionbar, null);
-        final ImageView imageViewPostion = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_position);
-        final ImageView imageViewOverflow = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_overflow);
-        final ImageView imageViewMap = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_map);
-        imageViewMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                backStack();
-            }
-        });
-        imageViewOverflow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setOnPupMenu(v);
-            }
-        });
-        imageViewPostion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.imageView_position:
-                        setMapFragment();
-                        loadStack();
-                        break;
-                }
-            }
-        });
-        actionBarMain.setCustomView(viewCustomActionBar);
-        actionBarMain.setDisplayShowCustomEnabled(true);
     }
 
     //add menu to image in actionbar
@@ -316,18 +325,17 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
 
     //show kilometers
     private void showKilometers(Location location) {
+        float speedInKilometers;
         //todo: value for testing
         location.setSpeed(15);
-        if (location != null && location.getSpeed() > (float) 0.5 && fragmentMain.ifRunnerIsReady() && GPSready) {
-            sydney = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+        if (location != null && location.getSpeed() > MIN_SPEED && fragmentMain.isRunnerReady() && GPSready) {
+            coordinates = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
             updatePosition++;
-            if (updatePosition == 1) {
-                //todo: check if this is needed
-                //lastLocation.set(location);
-            } else {
+            if (updatePosition != 1) {
+                speedInKilometers = location.getSpeed() * KILOMETER_FACTOR;
                 myGoogleMap.getPoint(location);
                 kilometry = round(kilometry + lastLocation.distanceTo(location) / 1000, 2);
-                speed = round(location.getSpeed() * (float) 3.6, 2);
+                speed = round(speedInKilometers, 2);
                 calory = round(calory + calculateCalory(speed), 2);
                 fragmentMain.getPredkosc(speed);
                 fragmentMain.getDistance(kilometry);
@@ -354,11 +362,11 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     private float calculateCalory(float speed) {
         float wynik = 0;
         if (speed < 5) {
-            wynik = (float) 0.23;
+            wynik = WALK;
         } else if (speed < 10) {
-            wynik = (float) 0.83;
+            wynik = RUN;
         } else if (speed > 10) {
-            wynik = (float) 0.75;
+            wynik = FAST_RUN;
         }
         return wynik;
     }
@@ -482,9 +490,10 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
 
     //take screenshot form googleMap
     private void getSnapshot(Bitmap bitmap) {
+        final int QUALITY = 100;
         try {
             fileOutputStream = new FileOutputStream(ClassLoadingImage.pathForImage());
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, QUALITY, fileOutputStream);
             fileOutputStream.flush();
             fileOutputStream.close();
         } catch (Exception e) {

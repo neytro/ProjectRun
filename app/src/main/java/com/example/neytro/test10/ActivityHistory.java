@@ -15,6 +15,14 @@ import android.widget.TextView;
  * Created by Neytro on 2015-04-03.
  */
 public class ActivityHistory extends ActionBarActivity {
+    private final String COLUMN_SPEED = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SPEED;
+    private final String COLUMN_CALORY = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_CALORY;
+    private final String COLUMN_DATE = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DATE;
+    private final String COLUMN_DISTANCE = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE;
+    private final String COLUMN_TIME = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME;
+    private final String COLUMN_TIME_P = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD;
+    private final String COLUMN_SCREENSHOT = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT;
+    private final int EMPTY = 1;
     private ActionBar actionBar;
     private ListView listViewAdapter;
     private AdapterItem adapterItem;
@@ -25,40 +33,64 @@ public class ActivityHistory extends ActionBarActivity {
         setContentView(R.layout.activity_history);
         setActionBar();
         readData();
-        setActivityAddapter();
+        loadAdapterIfnotEmpty();
+    }
+
+    //add action bar
+    private void setActionBar() {
+        actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_action_arrow_back);
+        actionBar.setTitle(getString(R.string.history));
+        actionBar.show();
     }
 
     //read value from database
     private void readData() {
-        adapterItem = new AdapterItem();
         ClassFeedReaderDbHelper myDatabase = new ClassFeedReaderDbHelper(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
         Cursor cursor = database.query(ClassFeedReaderContract.FeedEntry.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
-        if (cursor.getCount() >= 1) {
-            for (int i = cursor.getCount() - 1; i >= 0; i--) {
-                cursor.moveToPosition(i);
-                adapterItem.setSpeed(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SPEED)));
-                adapterItem.setCalory(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_CALORY)));
-                adapterItem.setDate(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DATE)));
-                adapterItem.setDistance(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE)));
-                adapterItem.setTime(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME)));
-                adapterItem.setTimePeriod(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD)));
-                adapterItem.setImage(cursor.getString(cursor.getColumnIndexOrThrow(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT)));
-            }
+        fillAdapter(cursor);
+    }
+
+    private void fillAdapter(Cursor cursor) {
+        adapterItem = new AdapterItem();
+        if (cursor.getCount() >= EMPTY) {
+            getValueFromDatabase(cursor);
+        }
+    }
+
+    private void getValueFromDatabase(Cursor cursor) {
+        for (int i = cursor.getCount() - 1; i >= 0; i--) {
+            cursor.moveToPosition(i);
+            adapterItem.setSpeed(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SPEED)));
+            adapterItem.setCalory(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CALORY)));
+            adapterItem.setDate(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE)));
+            adapterItem.setDistance(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DISTANCE)));
+            adapterItem.setTime(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIME)));
+            adapterItem.setTimePeriod(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIME_P)));
+            adapterItem.setImage(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SCREENSHOT)));
         }
     }
 
     //add adapter to listview
-    private void setActivityAddapter() {
+    private void loadAdapterIfnotEmpty() {
         if (adapterItem.getSpeed() == null) {
-            TextView textViewInfo = (TextView) findViewById(R.id.textViewInfo);
-            textViewInfo.setText(getString(R.string.empty));
+            setEmptyText();
         } else {
-            AdapterHistory hisotyrActivityClass = new AdapterHistory(this, R.layout.activity_history_array_list, adapterItem);
-            listViewAdapter = (ListView) findViewById(R.id.listViewAdapter);
-            listViewAdapter.setAdapter(hisotyrActivityClass);
+            loadAdapter();
         }
+    }
+
+    private void setEmptyText() {
+        TextView textViewInfo = (TextView) findViewById(R.id.textViewInfo);
+        textViewInfo.setText(getString(R.string.empty));
+    }
+
+    private void loadAdapter() {
+        AdapterHistory hisotyrActivityClass = new AdapterHistory(this, R.layout.activity_history_array_list, adapterItem);
+        listViewAdapter = (ListView) findViewById(R.id.listViewAdapter);
+        listViewAdapter.setAdapter(hisotyrActivityClass);
     }
 
     //create menu to main activity
@@ -81,14 +113,6 @@ public class ActivityHistory extends ActionBarActivity {
                 return (true);
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    //add action bar
-    private void setActionBar() {
-        actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_action_arrow_back);
-        actionBar.setTitle(getString(R.string.history));
-        actionBar.show();
     }
 
     //alert dialog for remove database

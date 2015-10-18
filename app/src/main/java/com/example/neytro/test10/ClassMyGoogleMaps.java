@@ -16,43 +16,45 @@ import java.util.ArrayList;
  */
 public class ClassMyGoogleMaps {
     private GoogleMap googleMap;
-    private ArrayList<LatLng> coordList = new ArrayList<LatLng>();
+    private ArrayList<LatLng> coordinateList = new ArrayList<LatLng>();
 
     public ClassMyGoogleMaps(GoogleMap var1, ArrayList<LatLng> var2) {
         googleMap = var1;
-        coordList = var2;
+        coordinateList = var2;
     }
 
     //draw route in google map
     public void drawRoute() {
+        final int LINE_THINKNESS = 10;
         Polyline polyline;
         PolylineOptions options = new PolylineOptions();
-        if (coordList.size() > 1) {
-            options.addAll(coordList);
-            options.width(10).color(Color.BLUE).geodesic(true).visible(true).zIndex(30);
+        if (coordinateList.size() > 1) {
+            options.addAll(coordinateList);
+            options.width(LINE_THINKNESS).color(Color.BLUE).geodesic(true).visible(true).zIndex(30);
             polyline = googleMap.addPolyline(options);
-            polyline.setPoints(coordList);
-            googleMap.addMarker(new MarkerOptions().position(coordList.get(0)).title("START"));
+            polyline.setPoints(coordinateList);
+            googleMap.addMarker(new MarkerOptions().position(coordinateList.get(0)).title("START"));
         }
     }
 
     public void getPoint(Location location) {
         LatLng latLngRoute = new LatLng(location.getLatitude(), location.getLongitude());
-        coordList.add(latLngRoute);
+        coordinateList.add(latLngRoute);
     }
 
-    public void folowGpsPosition(Location var1) {
-        LatLng position = new LatLng(var1.getLatitude(), var1.getLongitude());
-        googleMap.animateCamera(CameraUpdateFactory.newLatLng(position));
+    public void folowGpsPosition(Location location) {
+        LatLng actualPosition = new LatLng(location.getLatitude(), location.getLongitude());
+        googleMap.animateCamera(CameraUpdateFactory.newLatLng(actualPosition));
     }
 
     public void centerCamera() {
+        final int BOUND_FRAME = 50;
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        if (coordList.size() >= 1) {
-            for (LatLng points : coordList) {
+        if (coordinateList.size() >= 1) {
+            for (LatLng points : coordinateList) {
                 builder.include(points);
             }
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 50));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), BOUND_FRAME));
         }
     }
 }

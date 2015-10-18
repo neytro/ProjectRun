@@ -13,72 +13,72 @@ public class AdapterItem {
     private ArrayList<String> image;
 
     //take value speed
-    public void setSpeed(String var1) {
-        if (speed == null) {
-            speed = new ArrayList<>();
-            speed.add(var1);
+    public void setSpeed(String speed) {
+        if (this.speed == null) {
+            this.speed = new ArrayList<>();
+            this.speed.add(speed);
         } else {
-            speed.add(var1);
+            this.speed.add(speed);
         }
     }
 
     //take value distance
-    public void setDistance(String var1) {
-        if (distance == null) {
-            distance = new ArrayList<>();
-            distance.add(var1);
+    public void setDistance(String distance) {
+        if (this.distance == null) {
+            this.distance = new ArrayList<>();
+            this.distance.add(distance);
         } else {
-            distance.add(var1);
+            this.distance.add(distance);
         }
     }
 
     //take value calory
-    public void setCalory(String var1) {
-        if (calory == null) {
-            calory = new ArrayList<>();
-            calory.add(var1);
+    public void setCalory(String calory) {
+        if (this.calory == null) {
+            this.calory = new ArrayList<>();
+            this.calory.add(calory);
         } else {
-            calory.add(var1);
+            this.calory.add(calory);
         }
     }
 
     //take value date
-    public void setDate(String var1) {
-        if (date == null) {
-            date = new ArrayList<>();
-            date.add(var1);
+    public void setDate(String date) {
+        if (this.date == null) {
+            this.date = new ArrayList<>();
+            this.date.add(date);
         } else {
-            date.add(var1);
+            this.date.add(date);
         }
     }
 
     //take value time
-    public void setTime(String var1) {
-        if (time == null) {
-            time = new ArrayList<>();
-            time.add(var1);
+    public void setTime(String time) {
+        if (this.time == null) {
+            this.time = new ArrayList<>();
+            this.time.add(time);
         } else {
-            time.add(var1);
+            this.time.add(time);
         }
     }
 
     //take value timePeriod
-    public void setTimePeriod(String var1) {
-        if (timePeriod == null) {
-            timePeriod = new ArrayList<>();
-            timePeriod.add(var1);
+    public void setTimePeriod(String timePeriod) {
+        if (this.timePeriod == null) {
+            this.timePeriod = new ArrayList<>();
+            this.timePeriod.add(timePeriod);
         } else {
-            timePeriod.add(var1);
+            this.timePeriod.add(timePeriod);
         }
     }
 
     //take value image
-    public void setImage(String var1) {
-        if (image == null) {
-            image = new ArrayList<>();
-            image.add(var1);
+    public void setImage(String image) {
+        if (this.image == null) {
+            this.image = new ArrayList<>();
+            this.image.add(image);
         } else {
-            image.add(var1);
+            this.image.add(image);
         }
     }
 

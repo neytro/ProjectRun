@@ -11,7 +11,9 @@ import android.widget.TextView;
  * Created by Neytro on 2015-07-17.
  */
 public class AdapterHistory extends ArrayAdapter<String> {
-    public static final String TAG = "view";
+    public static final String TAG = "pathForImage";
+    private final int IMAGE_HEIGHT = 100;
+    private final int IMAGE_WIDTH = 100;
     private Context contextList;
     private AdapterItem adapterItem;
     private ViewHolder viewHolder = new ViewHolder();
@@ -54,7 +56,7 @@ public class AdapterHistory extends ArrayAdapter<String> {
                 getContext().startActivity(intent);
             }
         });
-        loader.loadImage(adapterItem.getImage().get(position), holder.imageViewIcon, 100, 100);
+        loader.loadImage(adapterItem.getImage().get(position), holder.imageViewIcon, IMAGE_WIDTH, IMAGE_HEIGHT);
         holder.textViewDbDate.setText(adapterItem.getDate().get(position));
         holder.textViewDbDistance.setText(adapterItem.getDistance().get(position));
         holder.textViewDbCalory.setText(adapterItem.getCalory().get(position));

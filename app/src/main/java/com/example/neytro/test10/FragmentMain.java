@@ -14,25 +14,26 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import static com.example.neytro.test10.R.id.textViewDistance;
 public class FragmentMain extends Fragment implements Chronometer.OnChronometerTickListener {
+    private final int DISTANCE = 0;
+    private final int SPEED = 1;
+    private final int CALORY = 2;
     private View viewMainFragment;
     private Button buttonRestart;
     private Button buttonStart;
     private Button buttonResume;
     private Button buttonStop;
-    private TextView textViewOdleglosc;
-    private ProgressBar progressBarRuchomy;
-    private ProgressBar progressBarStaly;
+    private TextView textViewDistance;
+    private ProgressBar progressBarMoveable;
+    private ProgressBar progressBarConstant;
     private Chronometer chronometer;
     private String periodTime;
     private boolean isMapReady = false;
-    private boolean isRunnerIsReady = false;
+    private boolean isRunnerReady = false;
     private boolean isRestartReady = false;
     private int updatePosition = 0;
-    private int whichCopy = 0;
-    private int liczGodziny = 0;
+    private int whichCategory = 0;
+    private int countHours = 0;
     private long lastPause;
     private float distance = 0;
     private float calory = 0;
@@ -51,7 +52,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
                     alertDialogParameters();
                 }
             });
-            textViewOdleglosc.setOnClickListener(new View.OnClickListener() {
+            textViewDistance.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     alertDialogParameters();
@@ -117,10 +118,10 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
         buttonRestart = (Button) viewMainFragment.findViewById(R.id.btnRestart);
         buttonResume = (Button) viewMainFragment.findViewById(R.id.btnResume);
         buttonStop = (Button) viewMainFragment.findViewById(R.id.btnStop);
-        textViewOdleglosc = (TextView) viewMainFragment.findViewById(textViewDistance);
-        progressBarRuchomy = (ProgressBar) viewMainFragment.findViewById(R.id.progressBarRuchomy);
-        progressBarStaly = (ProgressBar) viewMainFragment.findViewById(R.id.progressBarStaly);
-        textViewOdleglosc.setPaintFlags(textViewOdleglosc.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        textViewDistance = (TextView) viewMainFragment.findViewById(R.id.textViewDistance);
+        progressBarMoveable = (ProgressBar) viewMainFragment.findViewById(R.id.progressBarRuchomy);
+        progressBarConstant = (ProgressBar) viewMainFragment.findViewById(R.id.progressBarStaly);
+        textViewDistance.setPaintFlags(textViewDistance.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 
     public void alertDialogParameters() {
@@ -130,19 +131,19 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
                 .setItems(R.array.dialog_list, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        whichCopy = which;
+                        whichCategory = which;
                         switch (which) {
-                            case 0:
-                                textViewOdleglosc.setText(String.valueOf(distance) + " km");
+                            case DISTANCE:
+                                textViewDistance.setText(String.valueOf(distance) + " km");
                                 return;
-                            case 1:
-                                textViewOdleglosc.setText(String.valueOf(speed) + " km/h");
+                            case SPEED:
+                                textViewDistance.setText(String.valueOf(speed) + " km/h");
                                 return;
-                            case 2:
-                                textViewOdleglosc.setText(String.valueOf(calory) + " kcal");
+                            case CALORY:
+                                textViewDistance.setText(String.valueOf(calory) + " kcal");
                                 return;
                             default:
-                                textViewOdleglosc.setText(String.valueOf(distance) + " km");
+                                textViewDistance.setText(String.valueOf(distance) + " km");
                                 return;
                         }
                     }
@@ -152,24 +153,19 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
 
     //show blue ring(round progressbar)
     public void showRing() {
-        progressBarStaly.setVisibility(View.INVISIBLE);
-        progressBarRuchomy.setVisibility(View.VISIBLE);
+        progressBarConstant.setVisibility(View.INVISIBLE);
+        progressBarMoveable.setVisibility(View.VISIBLE);
     }
 
     //hide blue ring(round progressbar)
     private void hideRinge() {
-        progressBarStaly.setVisibility(View.VISIBLE);
-        progressBarRuchomy.setVisibility(View.INVISIBLE);
+        progressBarConstant.setVisibility(View.VISIBLE);
+        progressBarMoveable.setVisibility(View.INVISIBLE);
     }
 
     //check if stopwatch is ready
-    public boolean ifRunnerIsReady() {
-        return isRunnerIsReady;
-    }
-
-    //check if GoogleMap is ready
-    public boolean isMapReady() {
-        return isMapReady;
+    public boolean isRunnerReady() {
+        return isRunnerReady;
     }
 
     public boolean isRestartReady() {
@@ -182,48 +178,49 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
 
     //calcualte hour for stopwatch
     private void addHour() {
-        liczGodziny++;
-        if (liczGodziny < 10) {
-            chronometer.setFormat("0" + String.valueOf(liczGodziny) + ":%s");
-        } else chronometer.setFormat(String.valueOf(liczGodziny) + ":%s");
+        final int END_OF_CHRONOMETER = 10;
+        countHours++;
+        if (countHours < END_OF_CHRONOMETER) {
+            chronometer.setFormat("0" + String.valueOf(countHours) + ":%s");
+        } else chronometer.setFormat(String.valueOf(countHours) + ":%s");
     }
 
     //add colour for ring
     private void changeColorRing() {
-        progressBarStaly.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"), PorterDuff.Mode.MULTIPLY);
-        progressBarRuchomy.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"), PorterDuff.Mode.MULTIPLY);
+        progressBarConstant.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"), PorterDuff.Mode.MULTIPLY);
+        progressBarMoveable.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"), PorterDuff.Mode.MULTIPLY);
     }
 
     //todo: add km to reseources
     //add distance
-    public void getDistance(float var1) {
-        distance = var1;
-        if (whichCopy == 0) {
-            textViewOdleglosc.setText(String.valueOf(var1) + " km");
+    public void getDistance(float distance) {
+        this.distance = distance;
+        if (whichCategory == 0) {
+            textViewDistance.setText(String.valueOf(distance) + " km");
         }
     }
 
     //todo: add km/h to reseources
     //add speed
-    public void getPredkosc(float var1) {
-        speed = var1;
-        if (whichCopy == 1) {
-            textViewOdleglosc.setText(String.valueOf(var1) + " km/h");
+    public void getPredkosc(float speed) {
+        this.speed = speed;
+        if (whichCategory == 1) {
+            textViewDistance.setText(String.valueOf(speed) + " km/h");
         }
     }
 
     //todo: add kcal to reseources
     //add calory
-    public void getCalory(float var1) {
-        calory = var1;
-        if (whichCopy == 2) {
-            textViewOdleglosc.setText(String.valueOf(var1) + " kcal");
+    public void getCalory(float calory) {
+        this.calory = calory;
+        if (whichCategory == 2) {
+            textViewDistance.setText(String.valueOf(calory) + " kcal");
         }
     }
 
     //start stopwatch
     public void timerStart() {
-        isRunnerIsReady = true;
+        isRunnerReady = true;
         isMapReady = true;
         chronometer.start();
         chronometer.setBase(SystemClock.elapsedRealtime());
@@ -234,7 +231,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
     //stop stopwatch
     private void timerStop() {
         periodTime = chronometer.getText().toString();
-        isRunnerIsReady = false;
+        isRunnerReady = false;
         updatePosition = 0;
         lastPause = SystemClock.elapsedRealtime();
         chronometer.stop();
@@ -249,7 +246,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
 
     //resume stopwatch
     private void timerResume() {
-        isRunnerIsReady = true;
+        isRunnerReady = true;
         chronometer.setBase(chronometer.getBase() + SystemClock.elapsedRealtime() - lastPause);
         chronometer.start();
         buttonStop.setVisibility(View.VISIBLE);
@@ -262,13 +259,12 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
         ActivityMain activityMain = (ActivityMain) getActivity();
         activityMain.setMapFragment();
         activityMain.loadStack();
-        //activityMain.resetKilometry();
         buttonStart.setVisibility(View.VISIBLE);
         buttonResume.setVisibility(View.INVISIBLE);
         buttonRestart.setVisibility(View.INVISIBLE);
         lastPause = SystemClock.elapsedRealtime();
-        textViewOdleglosc.setText("0 km");
-        liczGodziny = 0;
+        textViewDistance.setText("0 km");
+        countHours = 0;
         chronometer.stop();
         chronometer.setFormat("00:%s");
         isMapReady = false;
