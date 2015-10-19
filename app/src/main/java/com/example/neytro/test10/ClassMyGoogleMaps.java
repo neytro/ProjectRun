@@ -15,6 +15,7 @@ import java.util.ArrayList;
  * Created by Neytro on 2015-10-10.
  */
 public class ClassMyGoogleMaps {
+    final int LINE_THINKNESS = 10;
     private GoogleMap googleMap;
     private ArrayList<LatLng> coordinateList = new ArrayList<LatLng>();
 
@@ -24,17 +25,24 @@ public class ClassMyGoogleMaps {
     }
 
     //draw route in google map
-    public void drawRoute() {
-        final int LINE_THINKNESS = 10;
+    public void drawRouteAndaddMarker() {
+        if (coordinateList.size() > 1) {
+            showRoute();
+            addStartMarker();
+        }
+    }
+
+    private void showRoute() {
         Polyline polyline;
         PolylineOptions options = new PolylineOptions();
-        if (coordinateList.size() > 1) {
-            options.addAll(coordinateList);
-            options.width(LINE_THINKNESS).color(Color.BLUE).geodesic(true).visible(true).zIndex(30);
-            polyline = googleMap.addPolyline(options);
-            polyline.setPoints(coordinateList);
-            googleMap.addMarker(new MarkerOptions().position(coordinateList.get(0)).title("START"));
-        }
+        options.addAll(coordinateList);
+        options.width(LINE_THINKNESS).color(Color.BLUE).geodesic(true).visible(true).zIndex(30);
+        polyline = googleMap.addPolyline(options);
+        polyline.setPoints(coordinateList);
+    }
+
+    private void addStartMarker() {
+        googleMap.addMarker(new MarkerOptions().position(coordinateList.get(0)).title("START"));
     }
 
     public void getPoint(Location location) {
@@ -48,7 +56,7 @@ public class ClassMyGoogleMaps {
     }
 
     public void centerCamera() {
-        final int BOUND_FRAME = 50;
+        final int BOUND_FRAME = 100;
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         if (coordinateList.size() >= 1) {
             for (LatLng points : coordinateList) {

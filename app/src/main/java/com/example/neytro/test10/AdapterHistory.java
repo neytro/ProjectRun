@@ -33,13 +33,7 @@ public class AdapterHistory extends ArrayAdapter<String> {
             holder = new ViewHolder();
             LayoutInflater layoutInflater = LayoutInflater.from(contextList);
             convertView = layoutInflater.inflate(R.layout.activity_history_array_list, null);
-            holder.textViewDbDate = (TextView) convertView.findViewById(R.id.textViewDbDate);
-            holder.textViewDbDistance = (TextView) convertView.findViewById(R.id.textViewDbDistance);
-            holder.textViewDbCalory = (TextView) convertView.findViewById(R.id.textViewDbCalory);
-            holder.textViewDbSpeed = (TextView) convertView.findViewById(R.id.textViewDbSpeed);
-            holder.textViewDbTime = (TextView) convertView.findViewById(R.id.textViewDbTime);
-            holder.textViewDbTimePeriod = (TextView) convertView.findViewById(R.id.textViewDbTimePeriod);
-            holder.imageViewIcon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
+            createRefrences(convertView, holder);
             convertView.setTag(holder);
             viewHolder = holder;
         } else {
@@ -49,13 +43,31 @@ public class AdapterHistory extends ArrayAdapter<String> {
         holder.imageViewIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //open activity with zoom Image
-                String path = adapterItem.getImage().get(position);
-                Intent intent = new Intent(getContext(), ActivityZoomImage.class);
-                intent.putExtra(TAG, path);
-                getContext().startActivity(intent);
+                showZoomedImage(position);
             }
         });
+        loadViewsToAdapter(position, holder);
+        return convertView;
+    }
+
+    private void createRefrences(View convertView, ViewHolder holder) {
+        holder.textViewDbDate = (TextView) convertView.findViewById(R.id.textViewDbDate);
+        holder.textViewDbDistance = (TextView) convertView.findViewById(R.id.textViewDbDistance);
+        holder.textViewDbCalory = (TextView) convertView.findViewById(R.id.textViewDbCalory);
+        holder.textViewDbSpeed = (TextView) convertView.findViewById(R.id.textViewDbSpeed);
+        holder.textViewDbTime = (TextView) convertView.findViewById(R.id.textViewDbTime);
+        holder.textViewDbTimePeriod = (TextView) convertView.findViewById(R.id.textViewDbTimePeriod);
+        holder.imageViewIcon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
+    }
+
+    private void showZoomedImage(int position) {
+        String path = adapterItem.getImage().get(position);
+        Intent intent = new Intent(getContext(), ActivityZoomImage.class);
+        intent.putExtra(TAG, path);
+        getContext().startActivity(intent);
+    }
+
+    private void loadViewsToAdapter(int position, ViewHolder holder) {
         loader.loadImage(adapterItem.getImage().get(position), holder.imageViewIcon, IMAGE_WIDTH, IMAGE_HEIGHT);
         holder.textViewDbDate.setText(adapterItem.getDate().get(position));
         holder.textViewDbDistance.setText(adapterItem.getDistance().get(position));
@@ -63,7 +75,6 @@ public class AdapterHistory extends ArrayAdapter<String> {
         holder.textViewDbSpeed.setText(adapterItem.getSpeed().get(position));
         holder.textViewDbTime.setText(adapterItem.getTime().get(position));
         holder.textViewDbTimePeriod.setText(adapterItem.getTimePeriod().get(position));
-        return convertView;
     }
 
     //keep reference for items

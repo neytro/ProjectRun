@@ -46,50 +46,53 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
             viewMainFragment = inflater.inflate(R.layout.fragment_main, container, false);
             setData();
             changeColorRing();
-            chronometer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    alertDialogParameters();
-                }
-            });
-            textViewDistance.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    alertDialogParameters();
-                }
-            });
-            buttonStart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showRing();
-                    timerStart();
-                }
-            });
-            buttonResume.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    timerResume();
-                    showRing();
-                }
-            });
-            buttonRestart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    timerRestart();
-                    hideRinge();
-                }
-            });
-            buttonStop.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    timerStop();
-                    hideRinge();
-                }
-            });
-            // Inflate the layout for this fragment
+            addListeners();
+
             return viewMainFragment;
         } else
             return viewMainFragment;
+    }
+
+    private void addListeners() {
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.chronometer:
+                        alertDialogParameters();
+                        break;
+                    case R.id.textViewDistance:
+                        alertDialogParameters();
+                        break;
+                    case R.id.btnStart:
+                        showRing();
+                        timerStart();
+                        break;
+                    case R.id.btnResume:
+                        timerResume();
+                        showRing();
+                        break;
+                    case R.id.btnRestart:
+                        timerRestart();
+                        hideRinge();
+                        break;
+                    case R.id.btnStop:
+                        timerStop();
+                        hideRinge();
+                        break;
+                }
+            }
+        };
+        activeListeners(listener);
+    }
+
+    private void activeListeners(View.OnClickListener listener) {
+        chronometer.setOnClickListener(listener);
+        textViewDistance.setOnClickListener(listener);
+        buttonStart.setOnClickListener(listener);
+        buttonResume.setOnClickListener(listener);
+        buttonRestart.setOnClickListener(listener);
+        buttonStop.setOnClickListener(listener);
     }
 
     @Override
@@ -196,7 +199,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
     public void getDistance(float distance) {
         this.distance = distance;
         if (whichCategory == 0) {
-            textViewDistance.setText(String.valueOf(distance) + " km");
+            textViewDistance.setText(String.valueOf(distance) + getString(R.string.unitKilometer));
         }
     }
 
@@ -205,7 +208,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
     public void getPredkosc(float speed) {
         this.speed = speed;
         if (whichCategory == 1) {
-            textViewDistance.setText(String.valueOf(speed) + " km/h");
+            textViewDistance.setText(String.valueOf(speed) + getString(R.string.unitKilometerPerHour));
         }
     }
 
@@ -214,7 +217,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
     public void getCalory(float calory) {
         this.calory = calory;
         if (whichCategory == 2) {
-            textViewDistance.setText(String.valueOf(calory) + " kcal");
+            textViewDistance.setText(String.valueOf(calory) + getString(R.string.kiloCalory));
         }
     }
 

@@ -29,6 +29,9 @@
     <string name="title_usuniecie_historii">Deleting history</string>
     <string name="time">Time:</string>
     <string name="timePeriod">Period time:</string>
+    <string name="kiloCalory">" kcal"</string>
+    <string name="unitKilometer">" km"</string>
+    <string name="unitKilometerPerHour">" km/h"</string>
     <string-array name="dialog_list">
         <item>Distance</item>
         <item>Speed</item>

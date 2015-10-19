@@ -252,6 +252,12 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         alertDialog.show();
     }
 
+    //stop Location update
+    private void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                googleApiClient, this);
+    }
+
     private void createLocationRequest() {
         locationRequest = new LocationRequest();
         locationRequest.setInterval(10000);
@@ -271,121 +277,6 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     @Override
     public void onLocationChanged(Location location) {
         calculateValues(location);
-    }
-
-    //activate when connection to the GoogleService was suspended
-    @Override
-    public void onConnectionSuspended(int i) {
-        showMessageConnectionSuspended();
-    }
-
-    //activate when connection to the GoogleService is failed
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        showMessageConnectionFailed();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    //activate when gps is set off.
-    @Override
-    public void onGpsStatusChanged(int event) {
-        switch (event) {
-            case GpsStatus.GPS_EVENT_STARTED:
-                Toast.makeText(this, "gps ready", Toast.LENGTH_LONG).show();
-                isGPSready = true;
-                break;
-            case GpsStatus.GPS_EVENT_STOPPED:
-                startLocationUpdates();
-                break;
-        }
-    }
-
-    //listener for all smartphone buttons
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            setOnPupMenu(imageViewOverflow);
-        }
-        return super.onKeyUp(keyCode, event);
-    }
-
-    //activate when map is ready
-    @Override
-    public void onMapReady(GoogleMap var1) {
-        myGoogleMap = new ClassMyGoogleMaps(var1, coordinateList);
-        googleMap = var1;
-        coordinates = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-        googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        googleMap.setMyLocationEnabled(true);
-        googleMap.setOnMyLocationChangeListener(this);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 14));
-        googleMap.getCameraPosition();
-        UiSettings uiSettings = googleMap.getUiSettings();
-        uiSettings.setZoomControlsEnabled(true);
-        uiSettings.setRotateGesturesEnabled(true);
-        uiSettings.setMapToolbarEnabled(false);
-        if (fragmentMain.isRestartReady()) {
-            googleMap.setOnMyLocationChangeListener(null);
-            myGoogleMap.drawRoute();
-            myGoogleMap.centerCamera();
-            googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-                public void onMapLoaded() {
-                    ActivityMain.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                        public void onSnapshotReady(Bitmap bitmap) {
-                            // Write image to disk
-                            alertDialogMap(bitmap);
-                            fragmentMain.setRestartFalse();
-                        }
-                    });
-                }
-            });
-        }
-    }
-
-    //save last state of fragment
-    public void onBackPressed() {
-        int count = getFragmentManager().getBackStackEntryCount();
-        if (count == 0) {
-            alertDialogExit();
-        } else {
-            saveLastViewOfFragment();
-        }
-    }
-
-    private GoogleMapOptions getOption() {
-        GoogleMapOptions options = new GoogleMapOptions();
-        options.mapType(GoogleMap.MAP_TYPE_SATELLITE)
-                .compassEnabled(false)
-                .rotateGesturesEnabled(false)
-                .tiltGesturesEnabled(false);
-        return options;
-    }
-
-    //show toast when connection to GoogleMap was failed
-    private void showMessageConnectionFailed() {
-        Context context = getApplicationContext();
-        CharSequence text = getString(R.string.problemConnection_GoogleService);
-        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-        toast.show();
     }
 
     //show kilometers
@@ -436,13 +327,11 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         return temp;
     }
 
-    //reset kilometers
-    public void resetKilometry() {
-        kilometers = 0;
-        calory = 0;
+    @Override
+    public void onConnectionSuspended(int i) {
+        showMessageConnectionSuspended();
     }
 
-    //show toast when connection to GoogleMap was susspended
     private void showMessageConnectionSuspended() {
         Context mContext = getApplicationContext();
         CharSequence text = getString(R.string.disconnected_GoogleService);
@@ -450,20 +339,97 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         toast.show();
     }
 
-    //alertdialog for Exit form application
-    private void alertDialogExit() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
-        alertDialog.setTitle(getString(R.string.exit));
-        alertDialog.setMessage(getString(R.string.messageExit));
-        alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                stopLocationUpdates();
-                System.exit(1);
-            }
-        });
-        alertDialog.setNegativeButton(getString(R.string.no), null);
-        alertDialog.show();
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        showMessageConnectionFailed();
+    }
+
+    private void showMessageConnectionFailed() {
+        Context context = getApplicationContext();
+        CharSequence text = getString(R.string.problemConnection_GoogleService);
+        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    //activate when gps is set off.
+    @Override
+    public void onGpsStatusChanged(int event) {
+        switch (event) {
+            case GpsStatus.GPS_EVENT_STARTED:
+                Toast.makeText(this, "gps ready", Toast.LENGTH_LONG).show();
+                isGPSready = true;
+                break;
+            case GpsStatus.GPS_EVENT_STOPPED:
+                startLocationUpdates();
+                break;
+        }
+    }
+
+    //listener for all smartphone buttons
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            setOnPupMenu(imageViewOverflow);
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
+    //activate when map is ready
+    @Override
+    public void onMapReady(GoogleMap var1) {
+        myGoogleMap = new ClassMyGoogleMaps(var1, coordinateList);
+        settingsForMap(var1);
+        if (fragmentMain.isRestartReady()) {
+            googleMap.setOnMyLocationChangeListener(null);
+            myGoogleMap.drawRouteAndaddMarker();
+            myGoogleMap.centerCamera();
+            googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                public void onMapLoaded() {
+                    ActivityMain.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                        public void onSnapshotReady(Bitmap bitmap) {
+                            // Write image to disk
+                            alertDialogMap(bitmap);
+                            fragmentMain.setRestartFalse();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    private void settingsForMap(GoogleMap map) {
+        final int ZOOM_POSITION = 14;
+        coordinates = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+        googleMap = map;
+        googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        googleMap.setMyLocationEnabled(true);
+        googleMap.setOnMyLocationChangeListener(this);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, ZOOM_POSITION));
+        googleMap.getCameraPosition();
+        UiSettings uiSettings = googleMap.getUiSettings();
+        uiSettings.setZoomControlsEnabled(true);
+        uiSettings.setRotateGesturesEnabled(true);
+        uiSettings.setMapToolbarEnabled(false);
     }
 
     //alertdialog to save history
@@ -489,12 +455,6 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         alertDialog.show();
     }
 
-    //stop Location update
-    private void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                googleApiClient, this);
-    }
-
     //take screenshot form googleMap
     private void getSnapshot(Bitmap bitmap) {
         final int QUALITY = 100;
@@ -510,20 +470,24 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
 
     //save value in database
     private void saveDatabase() {
-        String pathForImage = ClassLoadingImage.pathForImage().getAbsolutePath();
         chronometer = (Chronometer) findViewById(R.id.chronometer);
         ClassFeedReaderDbHelper myDatabase = new ClassFeedReaderDbHelper(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
+        database.insert(ClassFeedReaderContract.FeedEntry.TABLE_NAME, null, getContentValue());
+    }
+
+    private ContentValues getContentValue() {
+        String pathForImage = ClassLoadingImage.pathForImage().getAbsolutePath();
         ContentValues values = new ContentValues();
         values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID, "1");
-        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_CALORY, calory + " kcal");
-        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE, kilometers + " km");
+        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_CALORY, calory + getString(R.string.kiloCalory));
+        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE, kilometers + getString(R.string.unitKilometer));
         values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DATE, getRealTime().getDate());
-        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SPEED, speed + " km/h");
+        values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SPEED, speed + getString(R.string.unitKilometerPerHour));
         values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME, getRealTime().getTime());
         values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD, fragmentMain.setPeriodTime());
         values.put(ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT, pathForImage);
-        database.insert(ClassFeedReaderContract.FeedEntry.TABLE_NAME, null, values);
+        return values;
     }
 
     private void resetPeriodTime() {
@@ -545,10 +509,51 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         return classActualTime;
     }
 
+    //save last state of fragment
+    public void onBackPressed() {
+        int count = getFragmentManager().getBackStackEntryCount();
+        if (count == 0) {
+            alertDialogExit();
+        } else {
+            saveLastViewOfFragment();
+        }
+    }
+
+    private GoogleMapOptions getOption() {
+        GoogleMapOptions options = new GoogleMapOptions();
+        options.mapType(GoogleMap.MAP_TYPE_SATELLITE)
+                .compassEnabled(false)
+                .rotateGesturesEnabled(false)
+                .tiltGesturesEnabled(false);
+        return options;
+    }
+
+    //reset kilometers
+    public void resetKilometry() {
+        kilometers = 0;
+        calory = 0;
+    }
+
+    //alertdialog for Exit form application
+    private void alertDialogExit() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
+        alertDialog.setTitle(getString(R.string.exit));
+        alertDialog.setMessage(getString(R.string.messageExit));
+        alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                stopLocationUpdates();
+                System.exit(1);
+            }
+        });
+        alertDialog.setNegativeButton(getString(R.string.no), null);
+        alertDialog.show();
+    }
+
     @Override
     public void onMyLocationChange(Location location) {
         myGoogleMap.folowGpsPosition(location);
-        myGoogleMap.drawRoute();
+        myGoogleMap.drawRouteAndaddMarker();
     }
 }
 
