@@ -47,7 +47,6 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
             setData();
             changeColorRing();
             addListeners();
-
             return viewMainFragment;
         } else
             return viewMainFragment;
@@ -137,16 +136,16 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
                         whichCategory = which;
                         switch (which) {
                             case DISTANCE:
-                                textViewDistance.setText(String.valueOf(distance) + " km");
+                                textViewDistance.setText(String.valueOf(distance) + getString(R.string.unitKilometer));
                                 return;
                             case SPEED:
-                                textViewDistance.setText(String.valueOf(speed) + " km/h");
+                                textViewDistance.setText(String.valueOf(speed) + getString(R.string.unitKilometerPerHour));
                                 return;
                             case CALORY:
-                                textViewDistance.setText(String.valueOf(calory) + " kcal");
+                                textViewDistance.setText(String.valueOf(calory) + getString(R.string.kiloCalory));
                                 return;
                             default:
-                                textViewDistance.setText(String.valueOf(distance) + " km");
+                                textViewDistance.setText(String.valueOf(distance) + getString(R.string.unitKilometer));
                                 return;
                         }
                     }
