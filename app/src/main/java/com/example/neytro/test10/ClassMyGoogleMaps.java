@@ -19,9 +19,9 @@ public class ClassMyGoogleMaps {
     private GoogleMap googleMap;
     private ArrayList<LatLng> coordinateList = new ArrayList<LatLng>();
 
-    public ClassMyGoogleMaps(GoogleMap var1, ArrayList<LatLng> var2) {
-        googleMap = var1;
-        coordinateList = var2;
+    public ClassMyGoogleMaps(GoogleMap googleMap, ArrayList<LatLng> coordinateList) {
+        this.googleMap = googleMap;
+        this.coordinateList = coordinateList;
     }
 
     //draw route in google map
@@ -42,7 +42,14 @@ public class ClassMyGoogleMaps {
     }
 
     private void addStartMarker() {
-        googleMap.addMarker(new MarkerOptions().position(coordinateList.get(0)).title("START"));
+        googleMap.addMarker(createMarker());
+    }
+
+    private MarkerOptions createMarker() {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(coordinateList.get(0));
+        markerOptions.title("START");
+        return markerOptions;
     }
 
     public void getPoint(Location location) {
