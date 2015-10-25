@@ -17,7 +17,7 @@ public class AdapterHistory extends ArrayAdapter<String> {
     private Context contextList;
     private AdapterItem adapterItem;
     private ViewHolder viewHolder = new ViewHolder();
-    private ClassLoadingImage loader = new ClassLoadingImage();
+    private LoadingImage loader = new LoadingImage();
 
     public AdapterHistory(Context context, int resource, AdapterItem adapter) {
         super(context, resource, adapter.getCalory());

@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Created by Neytro on 2015-08-16.
  */
-public class ClassLoadingImage {
+public class LoadingImage {
     private int reqWidth;
     private int reqHeight;
     class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {

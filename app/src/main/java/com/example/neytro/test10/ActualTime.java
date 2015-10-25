@@ -3,11 +3,11 @@ package com.example.neytro.test10;
  * Created by Neytro on 2015-09-12.
  * keep value of actual time
  */
-public class ClassActualTime {
+public class ActualTime {
     private String time;
     private String date;
 
-    public ClassActualTime(String... format) {
+    public ActualTime(String... format) {
         time = format[0];
         date = format[1];
     }

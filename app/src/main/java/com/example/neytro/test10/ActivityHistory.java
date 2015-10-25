@@ -15,13 +15,13 @@ import android.widget.TextView;
  * Created by Neytro on 2015-04-03.
  */
 public class ActivityHistory extends ActionBarActivity {
-    private final String COLUMN_SPEED = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SPEED;
-    private final String COLUMN_CALORY = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_CALORY;
-    private final String COLUMN_DATE = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DATE;
-    private final String COLUMN_DISTANCE = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_DISTANCE;
-    private final String COLUMN_TIME = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME;
-    private final String COLUMN_TIME_P = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_TIME_PERIOD;
-    private final String COLUMN_SCREENSHOT = ClassFeedReaderContract.FeedEntry.COLUMN_NAME_SCREENSHOOT;
+    private final String COLUMN_SPEED = DbColumns.FeedEntry.COLUMN_NAME_SPEED;
+    private final String COLUMN_CALORY = DbColumns.FeedEntry.COLUMN_NAME_CALORY;
+    private final String COLUMN_DATE = DbColumns.FeedEntry.COLUMN_NAME_DATE;
+    private final String COLUMN_DISTANCE = DbColumns.FeedEntry.COLUMN_NAME_DISTANCE;
+    private final String COLUMN_TIME = DbColumns.FeedEntry.COLUMN_NAME_TIME;
+    private final String COLUMN_TIME_P = DbColumns.FeedEntry.COLUMN_NAME_TIME_PERIOD;
+    private final String COLUMN_SCREENSHOT = DbColumns.FeedEntry.COLUMN_NAME_SCREENSHOOT;
     private final int EMPTY = 1;
     private ActionBar actionBar;
     private ListView listViewAdapter;
@@ -46,9 +46,9 @@ public class ActivityHistory extends ActionBarActivity {
 
     //read value from database
     private void readData() {
-        ClassFeedReaderDbHelper myDatabase = new ClassFeedReaderDbHelper(this);
+        DbManagement myDatabase = new DbManagement(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
-        Cursor cursor = database.query(ClassFeedReaderContract.FeedEntry.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = database.query(DbColumns.FeedEntry.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
         fillAdapter(cursor);
     }
@@ -132,9 +132,9 @@ public class ActivityHistory extends ActionBarActivity {
 
     //clear database
     private void clearData() {
-        ClassFeedReaderDbHelper myDatabase = new ClassFeedReaderDbHelper(this);
+        DbManagement myDatabase = new DbManagement(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
-        database.delete(ClassFeedReaderContract.FeedEntry.TABLE_NAME, null, null);
+        database.delete(DbColumns.FeedEntry.TABLE_NAME, null, null);
         listViewAdapter.setAdapter(null);
     }
 }

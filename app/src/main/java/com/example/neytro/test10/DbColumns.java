@@ -3,10 +3,10 @@ import android.provider.BaseColumns;
 /**
  * Created by Neytro on 2015-07-20.
  */
-public final class ClassFeedReaderContract {
+public final class DbColumns {
     // To prevent someone from accidentally instantiating the contract class,
     // give it an empty constructor.
-    public ClassFeedReaderContract() {
+    public DbColumns() {
     }
 
     /* Inner class that defines the table contents */
