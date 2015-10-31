@@ -14,12 +14,12 @@ import java.util.ArrayList;
 /**
  * Created by Neytro on 2015-10-10.
  */
-public class MyGoogleMaps {
+public class GoogleMapsItems {
     final int LINE_THINKNESS = 10;
     private GoogleMap googleMap;
     private ArrayList<LatLng> coordinateList = new ArrayList<LatLng>();
 
-    public MyGoogleMaps(GoogleMap googleMap, ArrayList<LatLng> coordinateList) {
+    public GoogleMapsItems(GoogleMap googleMap, ArrayList<LatLng> coordinateList) {
         this.googleMap = googleMap;
         this.coordinateList = coordinateList;
     }

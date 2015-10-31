@@ -10,13 +10,13 @@ import com.google.android.gms.location.LocationServices;
 /**
  * Created by Neytro on 2015-10-26.
  */
-public class GoogleServisConnection implements GoogleApiClient.ConnectionCallbacks,
+public class GoogleServiseConnection implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
     private GoogleApiClient googleApiClient;
     private Context context;
     private ConnectionTester connectionTester;
 
-    public GoogleServisConnection(Context context) {
+    public GoogleServiseConnection(Context context) {
         this.context = context;
     }
 

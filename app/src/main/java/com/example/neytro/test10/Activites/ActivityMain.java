@@ -29,10 +29,10 @@ import com.example.neytro.test10.ActualTime;
 import com.example.neytro.test10.DbColumns;
 import com.example.neytro.test10.DbManagement;
 import com.example.neytro.test10.Fragments.FragmentMain;
-import com.example.neytro.test10.GoogleServisConnection;
+import com.example.neytro.test10.GoogleServiseConnection;
 import com.example.neytro.test10.LoadingImage;
 import com.example.neytro.test10.MainActionBar;
-import com.example.neytro.test10.MyGoogleMaps;
+import com.example.neytro.test10.GoogleMapsItems;
 import com.example.neytro.test10.Person;
 import com.example.neytro.test10.R;
 import com.example.neytro.test10.SpeedMotion;
@@ -75,7 +75,7 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     private MapFragment mMapFragment;
     private FileOutputStream fileOutputStream;
     private Chronometer chronometer;
-    private MyGoogleMaps myGoogleMap;
+    private GoogleMapsItems googleMapsItems;
     private ImageView imageViewPosition;
     private ImageView imageViewOverflow;
     private ImageView imageViewMap;
@@ -94,7 +94,7 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         setMainFragment();
         mainActionBar = new MainActionBar(this, getSupportActionBar());
         mainActionBar.displayActionBar();
-        GoogleServisConnection service = new GoogleServisConnection(this);
+        GoogleServiseConnection service = new GoogleServiseConnection(this);
         service.connectGoogleService();
         //connectGoogleService();
     }
@@ -300,7 +300,7 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
             coordinates = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
             numberOfLocationPoint++;
             if (numberOfLocationPoint != 1) {
-                myGoogleMap.getPoint(location);
+                googleMapsItems.getPoint(location);
                 calculateKilometers(location);
                 calculateSpeedAndCalory(location);
                 lastLocation.set(location);
@@ -410,12 +410,12 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     //activate when map is ready
     @Override
     public void onMapReady(GoogleMap var1) {
-        myGoogleMap = new MyGoogleMaps(var1, coordinateList);
+        googleMapsItems = new GoogleMapsItems(var1, coordinateList);
         settingsForMap(var1);
         if (fragmentMain.isRestartReady()) {
             googleMap.setOnMyLocationChangeListener(null);
-            myGoogleMap.drawRouteAndaddMarker();
-            myGoogleMap.centerCamera();
+            googleMapsItems.drawRouteAndaddMarker();
+            googleMapsItems.centerCamera();
             googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                 public void onMapLoaded() {
                     ActivityMain.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
@@ -565,8 +565,8 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
 
     @Override
     public void onMyLocationChange(Location location) {
-        myGoogleMap.folowGpsPosition(location);
-        myGoogleMap.drawRouteAndaddMarker();
+        googleMapsItems.folowGpsPosition(location);
+        googleMapsItems.drawRouteAndaddMarker();
     }
 }
 

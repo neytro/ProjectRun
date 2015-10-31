@@ -9,6 +9,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 /**
  * Created by Neytro on 2015-10-28.
  */
@@ -18,6 +19,7 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
     private Location lastLocation;
     private ConnectionTester connectionTester;
     private Context context;
+    private int numberOfLocationPoint = 0;
 
     public MainLocation(GoogleApiClient googleApiClient, Context context) {
         this.googleApiClient = googleApiClient;
@@ -68,6 +70,22 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
 
     @Override
     public void onLocationChanged(Location location) {
+        calculateValues(location);
+    }
+
+    private void calculateValues(Location location) {
+        final float MIN_SPEED = (float) 0.5;
+        //todo: value for testing
+        location.setSpeed(15);
+        if (location != null && location.getSpeed() > MIN_SPEED) /*&& fragmentMain.isButtonStartClicked() && isGPSready) */ {
+            numberOfLocationPoint++;
+            if (numberOfLocationPoint != 1) {
+                myGoogleMap.getPoint(location);
+                calculateKilometers(location);
+                calculateSpeedAndCalory(location);
+                lastLocation.set(location);
+            }
+        }
     }
 
     @Override
