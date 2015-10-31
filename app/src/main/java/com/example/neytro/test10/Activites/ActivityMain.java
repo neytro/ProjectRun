@@ -1,4 +1,4 @@
-package com.example.neytro.test10;
+package com.example.neytro.test10.Activites;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -25,6 +25,17 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import com.example.neytro.test10.ActualTime;
+import com.example.neytro.test10.DbColumns;
+import com.example.neytro.test10.DbManagement;
+import com.example.neytro.test10.Fragments.FragmentMain;
+import com.example.neytro.test10.GoogleServisConnection;
+import com.example.neytro.test10.LoadingImage;
+import com.example.neytro.test10.MainActionBar;
+import com.example.neytro.test10.MyGoogleMaps;
+import com.example.neytro.test10.Person;
+import com.example.neytro.test10.R;
+import com.example.neytro.test10.SpeedMotion;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -68,6 +79,7 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     private ImageView imageViewPosition;
     private ImageView imageViewOverflow;
     private ImageView imageViewMap;
+    private MainActionBar mainActionBar;
     private boolean isGPSready = false;
     private int numberOfLocationPoint = 0;
     private float calory = 0;
@@ -80,8 +92,11 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_main);
         viewFragmentmain = LayoutInflater.from(this).inflate(R.layout.fragment_main, null);
         setMainFragment();
-        setCustomActionBar();
-        connectGoogleService();
+        mainActionBar = new MainActionBar(this, getSupportActionBar());
+        mainActionBar.displayActionBar();
+        GoogleServisConnection service = new GoogleServisConnection(this);
+        service.connectGoogleService();
+        //connectGoogleService();
     }
 
     //load FragmentMain
@@ -208,10 +223,10 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     //activate when GoogleService is connected
     @Override
     public void onConnected(Bundle bundle) {
-        checkGPSsettings();
-        createLocationRequest();
-        getLastLocation();
-        startLocationUpdates();
+        //checkGPSsettings();
+        // createLocationRequest();
+        // getLastLocation();
+        //startLocationUpdates();
     }
 
     //show this dialog when gps is off.

@@ -1,4 +1,4 @@
-package com.example.neytro.test10;
+package com.example.neytro.test10.Fragments;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.neytro.test10.Activites.ActivityMain;
+import com.example.neytro.test10.R;
 public class FragmentMain extends Fragment implements Chronometer.OnChronometerTickListener {
     private final int DISTANCE = 0;
     private final int SPEED = 1;

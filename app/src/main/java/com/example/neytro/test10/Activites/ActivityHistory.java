@@ -1,4 +1,4 @@
-package com.example.neytro.test10;
+package com.example.neytro.test10.Activites;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -11,6 +11,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.neytro.test10.AdapterHistory;
+import com.example.neytro.test10.AdapterItem;
+import com.example.neytro.test10.DbColumns;
+import com.example.neytro.test10.DbManagement;
+import com.example.neytro.test10.R;
 /**
  * Created by Neytro on 2015-04-03.
  */

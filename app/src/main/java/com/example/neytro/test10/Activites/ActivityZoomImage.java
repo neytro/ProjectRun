@@ -1,7 +1,11 @@
-package com.example.neytro.test10;
+package com.example.neytro.test10.Activites;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ImageView;
+
+import com.example.neytro.test10.AdapterHistory;
+import com.example.neytro.test10.LoadingImage;
+import com.example.neytro.test10.R;
 /**
  * Created by Neytro on 2015-10-10.
  */
