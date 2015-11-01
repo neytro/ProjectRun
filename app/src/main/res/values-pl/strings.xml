@@ -2,36 +2,39 @@
 <resources>
     <string name="app_name">Project RUN</string>
     <string name="ignor">IGNOR</string>
-    <string name="action_settings">Ustawienia</string>
-    <string name="history">Historie</string>
-    <string name="exit">Wyjście</string>
-    <string name="disconnected_GoogleService">Zostałeś rozłączony z Google Service.</string>
-    <string name="problemConnection_GoogleService">Problem z połączeniem</string>
-    <string name="GPStitle">Nieaktywny GPS</string>
-    <string name="GPSmessage">Przejdź do ustawień, i uaktywnij GPS</string>
-    <string name="Settings">USTAWIENIA</string>
-    <string name="messageExit">Naprawdę?</string>
-    <string name="yes">TAK</string>
-    <string name="no">NIE</string>
-    <string name="date">Data:</string>
-    <string name="calory">Kalorie:</string>
-    <string name="speed">Prędkość:</string>
-    <string name="distance">Odległość:</string>
+    <string name="action_settings">Settings</string>
+    <string name="history">History</string>
+    <string name="exit">Exit</string>
+    <string name="disconnected_GoogleService">You have been disconected from Google Service.</string>
+    <string name="problemConnection_GoogleService">Problem with connection</string>
+    <string name="GPStitle">Inactive GPS</string>
+    <string name="GPSmessage">Please go to settings, and active GPS</string>
+    <string name="Settings">SETTINGS</string>
+    <string name="messageExit">Really?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="date">Date:</string>
+    <string name="calory">Calory:</string>
+    <string name="speed">Speed:</string>
+    <string name="distance">Distance:</string>
 
 
     <string name="hello_blank_fragment">Czarny ekran</string>
-    <string name="dialogTitlePicker">Wybierz kategorie</string>
-    <string name="snapshot">Status został zapisany do Historii</string>
+    <string name="dialogTitlePicker">Choose category</string>
+    <string name="snapshot">Status has been saved to History</string>
     <string name="empty">EMPTY</string>
     <string name="saveHistory">save to history</string>
     <string name="saveState">Do you like save state?</string>
-    <string name="clear">Usuń historie</string>
-    <string name="title_usuniecie_historii">Usuwanie Historii</string>
-    <string name="time">Czas:</string>
-    <string name="timePeriod">Czas trwania:</string>
+    <string name="clear">Please delete history</string>
+    <string name="title_usuniecie_historii">Deleting history</string>
+    <string name="time">Time:</string>
+    <string name="timePeriod">Period time:</string>
+    <string name="kiloCalory">" kcal"</string>
+    <string name="unitKilometer">" km"</string>
+    <string name="unitKilometerPerHour">" km/h"</string>
     <string-array name="dialog_list">
-        <item>Odległość</item>
-        <item>Prędkość</item>
-        <item>Kalorie</item>
+        <item>Distance</item>
+        <item>Speed</item>
+        <item>Calory</item>
     </string-array>
 </resources>

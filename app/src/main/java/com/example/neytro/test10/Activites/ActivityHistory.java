@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.example.neytro.test10.AdapterHistory;
 import com.example.neytro.test10.AdapterItem;
 import com.example.neytro.test10.DbColumns;
-import com.example.neytro.test10.DbManagement;
+import com.example.neytro.test10.DbCreate;
 import com.example.neytro.test10.R;
 /**
  * Created by Neytro on 2015-04-03.
@@ -52,7 +52,7 @@ public class ActivityHistory extends ActionBarActivity {
 
     //read value from database
     private void readData() {
-        DbManagement myDatabase = new DbManagement(this);
+        DbCreate myDatabase = new DbCreate(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
         Cursor cursor = database.query(DbColumns.FeedEntry.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
@@ -138,7 +138,7 @@ public class ActivityHistory extends ActionBarActivity {
 
     //clear database
     private void clearData() {
-        DbManagement myDatabase = new DbManagement(this);
+        DbCreate myDatabase = new DbCreate(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
         database.delete(DbColumns.FeedEntry.TABLE_NAME, null, null);
         listViewAdapter.setAdapter(null);

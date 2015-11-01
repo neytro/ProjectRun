@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 import com.example.neytro.test10.ActualTime;
 import com.example.neytro.test10.DbColumns;
-import com.example.neytro.test10.DbManagement;
+import com.example.neytro.test10.DbCreate;
 import com.example.neytro.test10.Fragments.FragmentMain;
 import com.example.neytro.test10.GoogleServiseConnection;
 import com.example.neytro.test10.LoadingImage;
@@ -94,7 +94,7 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         setMainFragment();
         mainActionBar = new MainActionBar(this, getSupportActionBar());
         mainActionBar.displayActionBar();
-        GoogleServiseConnection service = new GoogleServiseConnection(this);
+        GoogleServiseConnection service = new GoogleServiseConnection(this, fragmentMain);
         service.connectGoogleService();
         //connectGoogleService();
     }
@@ -310,13 +310,13 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
 
     private void calculateKilometers(Location location) {
         kilometers = round(kilometers + lastLocation.distanceTo(location) / 1000, 2);
-        fragmentMain.getDistance(kilometers);
+        // fragmentMain.getDistance(kilometers);
     }
 
     private void calculateSpeedAndCalory(Location location) {
         float speedInKilometers = location.getSpeed() * KILOMETER_FACTOR;
         speed = round(speedInKilometers, 2);
-        fragmentMain.getPredkosc(speed);
+        // fragmentMain.getPredkosc(speed);
         calculateCalory(speed);
     }
 
@@ -330,7 +330,7 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
             wynik = speedMotion.fastSpeed();
         }
         calory = round(calory + wynik, 2);
-        fragmentMain.getCalory(calory);
+        //fragmentMain.getCalory(calory);
     }
 
     private float round(double f, int places) {
@@ -484,7 +484,7 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     //save value in database
     private void saveDatabase() {
         chronometer = (Chronometer) findViewById(R.id.chronometer);
-        DbManagement myDatabase = new DbManagement(this);
+        DbCreate myDatabase = new DbCreate(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
         database.insert(DbColumns.FeedEntry.TABLE_NAME, null, getContentValue());
     }

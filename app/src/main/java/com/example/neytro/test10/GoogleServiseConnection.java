@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.neytro.test10.Fragments.FragmentMain;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -15,8 +16,10 @@ public class GoogleServiseConnection implements GoogleApiClient.ConnectionCallba
     private GoogleApiClient googleApiClient;
     private Context context;
     private ConnectionTester connectionTester;
+    private FragmentMain fragmentMain;
 
-    public GoogleServiseConnection(Context context) {
+    public GoogleServiseConnection(Context context, FragmentMain fragmentMain) {
+        this.fragmentMain = fragmentMain;
         this.context = context;
     }
 
@@ -34,7 +37,7 @@ public class GoogleServiseConnection implements GoogleApiClient.ConnectionCallba
     }
 
     private void startLocation() {
-        MainLocation mainLocation = new MainLocation(googleApiClient, context);
+        MainLocation mainLocation = new MainLocation(googleApiClient, context, fragmentMain);
         mainLocation.startUpdateLocation();
     }
 

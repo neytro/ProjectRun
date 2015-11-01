@@ -10,7 +10,7 @@ public class RunningValues {
     private SpeedMotion speedMotion = new Person();
     private final float KILOMETER_FACTOR = (float) 3.6;
 
-    public void calculateKilometers(Location lastLocation, Location currentLocation) {
+    public void calculateDistance(Location lastLocation, Location currentLocation) {
         kilometers = round(kilometers + lastLocation.distanceTo(currentLocation) / 1000, 2);
     }
 
@@ -30,6 +30,18 @@ public class RunningValues {
         }
         calory = round(calory + wynik, 2);
         //fragmentMain.getCalory(calory);
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public float getCalory() {
+        return calory;
+    }
+
+    public float getDistance() {
+        return kilometers;
     }
 
     private float round(double f, int places) {

@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by Neytro on 2015-07-20.
  */
-public class DbManagement extends SQLiteOpenHelper {
+public class DbCreate extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "FeedReader.db";
     private static final String TEXT_TYPE = " TEXT";
@@ -25,7 +25,7 @@ public class DbManagement extends SQLiteOpenHelper {
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + DbColumns.FeedEntry.TABLE_NAME;
 
-    public DbManagement(Context context) {
+    public DbCreate(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

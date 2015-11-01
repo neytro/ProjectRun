@@ -14,10 +14,13 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.neytro.test10.Activites.ActivityMain;
+import com.example.neytro.test10.FragmentViewValue;
 import com.example.neytro.test10.R;
-public class FragmentMain extends Fragment implements Chronometer.OnChronometerTickListener {
+import com.example.neytro.test10.RunningValues;
+public class FragmentMain extends Fragment implements Chronometer.OnChronometerTickListener, FragmentViewValue {
     private final int DISTANCE = 0;
     private final int SPEED = 1;
     private final int CALORY = 2;
@@ -196,7 +199,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
         progressBarMoveable.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"), PorterDuff.Mode.MULTIPLY);
     }
 
-    //todo: add km to reseources
+ /*   //todo: add km to reseources
     //add distance
     public void getDistance(float distance) {
         this.distance = distance;
@@ -212,16 +215,17 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
         if (whichCategory == 1) {
             textViewDistance.setText(String.valueOf(speed) + getString(R.string.unitKilometerPerHour));
         }
-    }
+    }*/
 
-    //todo: add kcal to reseources
+
+    /*//todo: add kcal to reseources
     //add calory
     public void getCalory(float calory) {
         this.calory = calory;
         if (whichCategory == 2) {
             textViewDistance.setText(String.valueOf(calory) + getString(R.string.kiloCalory));
         }
-    }
+    }*/
 
     //start stopwatch
     public void timerStart() {
@@ -274,6 +278,25 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
         chronometer.setFormat("00:%s");
         isMapReady = false;
         isRestartReady = true;
+    }
+
+    @Override
+    public void getRunningValue(RunningValues values) {
+        calory = values.getCalory();
+        speed = values.getSpeed();
+        distance = values.getDistance();
+        Toast.makeText(getActivity(), "maszyna ruszyla", Toast.LENGTH_LONG).show();
+        switch (whichCategory) {
+            case 0:
+                textViewDistance.setText(String.valueOf(distance) + getString(R.string.unitKilometer));
+                break;
+            case 1:
+                textViewDistance.setText(String.valueOf(speed) + getString(R.string.unitKilometerPerHour));
+                break;
+            case 2:
+                textViewDistance.setText(String.valueOf(calory) + getString(R.string.kiloCalory));
+                break;
+        }
     }
 }
 

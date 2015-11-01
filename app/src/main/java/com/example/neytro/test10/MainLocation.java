@@ -5,11 +5,11 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.widget.Toast;
 
+import com.example.neytro.test10.Fragments.FragmentMain;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 /**
  * Created by Neytro on 2015-10-28.
  */
@@ -20,14 +20,21 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
     private ConnectionTester connectionTester;
     private Context context;
     private int numberOfLocationPoint = 0;
+    private RunningValues runningValues;
+    private FragmentViewValue fragmentValue;
 
-    public MainLocation(GoogleApiClient googleApiClient, Context context) {
+    public MainLocation(GoogleApiClient googleApiClient, Context context, FragmentMain fragmentMain) {
         this.googleApiClient = googleApiClient;
         this.context = context;
+        fragmentValue = fragmentMain;
         connectionTester = new ConnectionTester(context);
+        runningValues = new RunningValues();
     }
 
     public void startUpdateLocation() {
+        createLocationRequest();
+        getLastLocation();
+        startLocationUpdates();
         activeGpsListener();
         if (!connectionTester.isGpsOn()) {
             showDialogGps();
@@ -70,6 +77,7 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
 
     @Override
     public void onLocationChanged(Location location) {
+        Toast.makeText(context, "ruszasz sie", Toast.LENGTH_LONG).show();
         calculateValues(location);
     }
 
@@ -80,9 +88,14 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
         if (location != null && location.getSpeed() > MIN_SPEED) /*&& fragmentMain.isButtonStartClicked() && isGPSready) */ {
             numberOfLocationPoint++;
             if (numberOfLocationPoint != 1) {
-                myGoogleMap.getPoint(location);
-                calculateKilometers(location);
-                calculateSpeedAndCalory(location);
+                // myGoogleMap.getPoint(location);
+                runningValues.calculateDistance(lastLocation, location);
+                runningValues.calculateSpeed(location);
+                runningValues.calculateCalory();
+                //calculateDistance(location);
+                //calculateSpeedAndCalory(location);
+                fragmentValue.getRunningValue(runningValues);
+                //fragmentMain.getRunningValues(runningValues);
                 lastLocation.set(location);
             }
         }
