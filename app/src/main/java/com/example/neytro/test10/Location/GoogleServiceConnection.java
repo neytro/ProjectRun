@@ -1,24 +1,27 @@
-package com.example.neytro.test10;
+package com.example.neytro.test10.Location;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.neytro.test10.ConnectionTester;
 import com.example.neytro.test10.Fragments.FragmentMain;
+import com.example.neytro.test10.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 /**
  * Created by Neytro on 2015-10-26.
  */
-public class GoogleServiseConnection implements GoogleApiClient.ConnectionCallbacks,
+public class GoogleServiceConnection implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
     private GoogleApiClient googleApiClient;
     private Context context;
     private ConnectionTester connectionTester;
     private FragmentMain fragmentMain;
+    private MainLocation mainLocation;
 
-    public GoogleServiseConnection(Context context, FragmentMain fragmentMain) {
+    public GoogleServiceConnection(Context context, FragmentMain fragmentMain) {
         this.fragmentMain = fragmentMain;
         this.context = context;
     }
@@ -37,7 +40,7 @@ public class GoogleServiseConnection implements GoogleApiClient.ConnectionCallba
     }
 
     private void startLocation() {
-        MainLocation mainLocation = new MainLocation(googleApiClient, context, fragmentMain);
+        mainLocation = new MainLocation(googleApiClient, context, fragmentMain);
         mainLocation.startUpdateLocation();
     }
 

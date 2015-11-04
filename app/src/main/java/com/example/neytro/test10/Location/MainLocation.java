@@ -1,15 +1,22 @@
-package com.example.neytro.test10;
+package com.example.neytro.test10.Location;
 import android.content.Context;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
 import android.widget.Toast;
 
+import com.example.neytro.test10.AlertDialogs;
+import com.example.neytro.test10.ConnectionTester;
+import com.example.neytro.test10.FragmentViewValue;
 import com.example.neytro.test10.Fragments.FragmentMain;
+import com.example.neytro.test10.RunningValues;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
 /**
  * Created by Neytro on 2015-10-28.
  */
@@ -22,6 +29,7 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
     private int numberOfLocationPoint = 0;
     private RunningValues runningValues;
     private FragmentViewValue fragmentValue;
+    private ArrayList<LatLng> coordinatedPoints;
 
     public MainLocation(GoogleApiClient googleApiClient, Context context, FragmentMain fragmentMain) {
         this.googleApiClient = googleApiClient;
@@ -29,7 +37,9 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
         fragmentValue = fragmentMain;
         connectionTester = new ConnectionTester(context);
         runningValues = new RunningValues();
+        coordinatedPoints = new ArrayList<>();
     }
+
 
     public void startUpdateLocation() {
         createLocationRequest();
@@ -88,17 +98,23 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
         if (location != null && location.getSpeed() > MIN_SPEED) /*&& fragmentMain.isButtonStartClicked() && isGPSready) */ {
             numberOfLocationPoint++;
             if (numberOfLocationPoint != 1) {
-                // myGoogleMap.getPoint(location);
                 runningValues.calculateDistance(lastLocation, location);
                 runningValues.calculateSpeed(location);
                 runningValues.calculateCalory();
-                //calculateDistance(location);
-                //calculateSpeedAndCalory(location);
+                getPoint(location);
                 fragmentValue.getRunningValue(runningValues);
-                //fragmentMain.getRunningValues(runningValues);
                 lastLocation.set(location);
             }
         }
+    }
+
+    private void getPoint(Location location) {
+        LatLng points = new LatLng(location.getLatitude(), location.getLongitude());
+        coordinatedPoints.add(points);
+    }
+
+    public ArrayList<LatLng> getAllPoints() {
+        return coordinatedPoints;
     }
 
     @Override

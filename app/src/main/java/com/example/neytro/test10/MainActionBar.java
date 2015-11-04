@@ -37,6 +37,6 @@ public class MainActionBar {
 
     private void addListeners() {
         listener = new ListenersForActionBar();
-        listener.activateListners(viewCustomActionBar);
+        listener.activateListners(viewCustomActionBar, context);
     }
 }

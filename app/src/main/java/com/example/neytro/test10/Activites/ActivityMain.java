@@ -8,12 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.location.GpsStatus;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,24 +20,20 @@ import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import com.example.neytro.test10.ActualTime;
 import com.example.neytro.test10.DbColumns;
 import com.example.neytro.test10.DbCreate;
 import com.example.neytro.test10.Fragments.FragmentMain;
-import com.example.neytro.test10.GoogleServiseConnection;
+import com.example.neytro.test10.Location.GoogleMapsItems;
+import com.example.neytro.test10.Location.GoogleServiceConnection;
 import com.example.neytro.test10.LoadingImage;
 import com.example.neytro.test10.MainActionBar;
-import com.example.neytro.test10.GoogleMapsItems;
 import com.example.neytro.test10.Person;
 import com.example.neytro.test10.R;
 import com.example.neytro.test10.SpeedMotion;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -53,10 +46,8 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-public class ActivityMain extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,
-        GpsStatus.Listener,
+public class ActivityMain extends ActionBarActivity implements
+
         OnMapReadyCallback,
         GoogleMap.OnMyLocationChangeListener {
     private final float MIN_SPEED = (float) 0.5;
@@ -94,7 +85,7 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         setMainFragment();
         mainActionBar = new MainActionBar(this, getSupportActionBar());
         mainActionBar.displayActionBar();
-        GoogleServiseConnection service = new GoogleServiseConnection(this, fragmentMain);
+        GoogleServiceConnection service = new GoogleServiceConnection(this, fragmentMain);
         service.connectGoogleService();
         //connectGoogleService();
     }
@@ -212,35 +203,35 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         getFragmentManager().popBackStack();
     }
 
-    private void connectGoogleService() {
+   /* private void connectGoogleService() {
         googleApiClient = new GoogleApiClient.Builder(this).
                 addConnectionCallbacks(this).
                 addOnConnectionFailedListener(this).
                 addApi(LocationServices.API).build();
         googleApiClient.connect();
-    }
+    }*/
 
     //activate when GoogleService is connected
-    @Override
+  /* @Override
     public void onConnected(Bundle bundle) {
         //checkGPSsettings();
         // createLocationRequest();
         // getLastLocation();
         //startLocationUpdates();
-    }
+    }*/
 
     //show this dialog when gps is off.
-    private void checkGPSsettings() {
+  /*  private void checkGPSsettings() {
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationManager.addGpsStatusListener(this);
         boolean isGpsOn = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!isGpsOn) {
             alertDialogGps();
         }
-    }
+    }*/
 
     //dialog for gps off.
-    private void alertDialogGps() {
+ /*   private void alertDialogGps() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
         alertDialog.setTitle(getString(R.string.GPStitle));
         alertDialog.setMessage(getString(R.string.GPSmessage));
@@ -263,15 +254,15 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
             }
         });
         alertDialog.show();
-    }
+    }*/
 
     //stop Location update
-    private void stopLocationUpdates() {
+    /*private void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 googleApiClient, this);
-    }
+    }*/
 
-    private void createLocationRequest() {
+   /* private void createLocationRequest() {
         locationRequest = new LocationRequest();
         locationRequest.setInterval(10000);
         locationRequest.setFastestInterval(5000);
@@ -285,15 +276,15 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     private void startLocationUpdates() {
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 googleApiClient, locationRequest, this);
-    }
+    }*/
 
-    @Override
+  /*  @Override
     public void onLocationChanged(Location location) {
         calculateValues(location);
-    }
+    }*/
 
     //show kilometers
-    private void calculateValues(Location location) {
+  /*  private void calculateValues(Location location) {
         //todo: value for testing
         location.setSpeed(15);
         if (location != null && location.getSpeed() > MIN_SPEED && fragmentMain.isButtonStartClicked() && isGPSready) {
@@ -338,8 +329,8 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         temp = (Math.round(temp));
         temp = temp / (int) (Math.pow(10, places));
         return temp;
-    }
-
+    }*/
+/*
     @Override
     public void onConnectionSuspended(int i) {
         showMessageConnectionSuspended();
@@ -362,7 +353,7 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         CharSequence text = getString(R.string.problemConnection_GoogleService);
         Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
         toast.show();
-    }
+    }*/
 
     @Override
     protected void onPause() {
@@ -385,9 +376,9 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     }
 
     //activate when gps is set off.
-    @Override
+    /*@Override
     public void onGpsStatusChanged(int event) {
-        switch (event) {
+        *//*switch (event) {
             case GpsStatus.GPS_EVENT_STARTED:
                 Toast.makeText(this, "gps ready", Toast.LENGTH_LONG).show();
                 isGPSready = true;
@@ -395,8 +386,8 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
             case GpsStatus.GPS_EVENT_STOPPED:
                 startLocationUpdates();
                 break;
-        }
-    }
+        }*//*
+    }*/
 
     //listener for all smartphone buttons
     @Override
@@ -410,12 +401,11 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
     //activate when map is ready
     @Override
     public void onMapReady(GoogleMap var1) {
-        googleMapsItems = new GoogleMapsItems(var1, coordinateList);
+        //googleMapsItems = new GoogleMapsItems(var1, coordinateList);
         settingsForMap(var1);
         if (fragmentMain.isRestartReady()) {
             googleMap.setOnMyLocationChangeListener(null);
             googleMapsItems.drawRouteAndaddMarker();
-            googleMapsItems.centerCamera();
             googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                 public void onMapLoaded() {
                     ActivityMain.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
@@ -555,7 +545,6 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
         alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                stopLocationUpdates();
                 System.exit(1);
             }
         });
@@ -565,7 +554,6 @@ public class ActivityMain extends ActionBarActivity implements GoogleApiClient.C
 
     @Override
     public void onMyLocationChange(Location location) {
-        googleMapsItems.folowGpsPosition(location);
         googleMapsItems.drawRouteAndaddMarker();
     }
 }

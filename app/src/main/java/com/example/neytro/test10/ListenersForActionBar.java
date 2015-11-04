@@ -1,6 +1,9 @@
 package com.example.neytro.test10;
+import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.example.neytro.test10.Fragments.FragmentGoogleMap;
 /**
  * Created by Neytro on 2015-10-25.
  */
@@ -8,9 +11,12 @@ public class ListenersForActionBar implements View.OnClickListener {
     private ImageView imageViewPosition;
     private ImageView imageViewOverflow;
     private ImageView imageViewMap;
+    private FragmentGoogleMap fragmentGoogleMap;
+    private Context context;
 
-    public void activateListners(View view) {
+    public void activateListners(View view, Context context) {
         addReferences(view);
+        this.context = context;
         imageViewMap.setOnClickListener(this);
         imageViewOverflow.setOnClickListener(this);
         imageViewPosition.setOnClickListener(this);
@@ -26,6 +32,8 @@ public class ListenersForActionBar implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imageView_position:
+                fragmentGoogleMap = new FragmentGoogleMap(context);
+                fragmentGoogleMap.setMapFragment();
                 // setMapFragment();
                 //  hidePositionImageAndShowMapImage();
                 showMapImage();
