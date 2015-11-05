@@ -21,6 +21,7 @@ public class GoogleServiceConnection implements GoogleApiClient.ConnectionCallba
     private FragmentMain fragmentMain;
     private MainLocation mainLocation;
 
+
     public GoogleServiceConnection(Context context, FragmentMain fragmentMain) {
         this.fragmentMain = fragmentMain;
         this.context = context;
@@ -40,8 +41,10 @@ public class GoogleServiceConnection implements GoogleApiClient.ConnectionCallba
     }
 
     private void startLocation() {
+        OnPointGiver onPointGiver = new GoogleMapsItems();
         mainLocation = new MainLocation(googleApiClient, context, fragmentMain);
         mainLocation.startUpdateLocation();
+        mainLocation.setOnPointGiver(onPointGiver);
     }
 
     @Override

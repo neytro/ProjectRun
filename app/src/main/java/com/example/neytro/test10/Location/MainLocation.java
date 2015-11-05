@@ -30,6 +30,7 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
     private RunningValues runningValues;
     private FragmentViewValue fragmentValue;
     private ArrayList<LatLng> coordinatedPoints;
+    private OnPointGiver onPointGiver;
 
     public MainLocation(GoogleApiClient googleApiClient, Context context, FragmentMain fragmentMain) {
         this.googleApiClient = googleApiClient;
@@ -38,6 +39,7 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
         connectionTester = new ConnectionTester(context);
         runningValues = new RunningValues();
         coordinatedPoints = new ArrayList<>();
+        onPointGiver = null;
     }
 
 
@@ -50,7 +52,6 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
             showDialogGps();
         }
     }
-
     private void activeGpsListener() {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         locationManager.addGpsStatusListener(this);
@@ -101,20 +102,26 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
                 runningValues.calculateDistance(lastLocation, location);
                 runningValues.calculateSpeed(location);
                 runningValues.calculateCalory();
-                getPoint(location);
+                addPoints(location);
                 fragmentValue.getRunningValue(runningValues);
                 lastLocation.set(location);
             }
         }
     }
 
-    private void getPoint(Location location) {
+    private void addPoints(Location location) {
         LatLng points = new LatLng(location.getLatitude(), location.getLongitude());
         coordinatedPoints.add(points);
+        transferPointsToColaborators();
     }
 
-    public ArrayList<LatLng> getAllPoints() {
-        return coordinatedPoints;
+    private void transferPointsToColaborators() {
+        onPointGiver.getAllPoints(coordinatedPoints);
+    }
+
+    public void setOnPointGiver(OnPointGiver onPointGiver) {
+        this.onPointGiver = onPointGiver;
+
     }
 
     @Override

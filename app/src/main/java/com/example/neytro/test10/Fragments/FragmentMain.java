@@ -266,7 +266,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
     //restart stopwatch
     private void timerRestart() {
         ActivityMain activityMain = (ActivityMain) getActivity();
-        activityMain.setMapFragment();
+        //activityMain.setMapFragment();
         activityMain.hidePositionImageAndShowMapImage();
         buttonStart.setVisibility(View.VISIBLE);
         buttonResume.setVisibility(View.INVISIBLE);

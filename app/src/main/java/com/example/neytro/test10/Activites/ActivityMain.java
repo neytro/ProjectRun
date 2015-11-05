@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
@@ -25,54 +24,25 @@ import com.example.neytro.test10.ActualTime;
 import com.example.neytro.test10.DbColumns;
 import com.example.neytro.test10.DbCreate;
 import com.example.neytro.test10.Fragments.FragmentMain;
-import com.example.neytro.test10.Location.GoogleMapsItems;
-import com.example.neytro.test10.Location.GoogleServiceConnection;
 import com.example.neytro.test10.LoadingImage;
+import com.example.neytro.test10.Location.GoogleServiceConnection;
 import com.example.neytro.test10.MainActionBar;
-import com.example.neytro.test10.Person;
 import com.example.neytro.test10.R;
-import com.example.neytro.test10.SpeedMotion;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-public class ActivityMain extends ActionBarActivity implements
-
-        OnMapReadyCallback,
-        GoogleMap.OnMyLocationChangeListener {
-    private final float MIN_SPEED = (float) 0.5;
-    private final float KILOMETER_FACTOR = (float) 3.6;
-    private SpeedMotion speedMotion = new Person();
-    private GoogleMap googleMap;
-    private GoogleApiClient googleApiClient;
-    private Location lastLocation;
-    private LocationRequest locationRequest;
+public class ActivityMain extends ActionBarActivity {
     private android.support.v7.app.ActionBar actionBarMain;
     private View viewCustomActionBar;
     private View viewFragmentmain;
     private FragmentMain fragmentMain = new FragmentMain();
-    private ArrayList<LatLng> coordinateList = new ArrayList<LatLng>();
-    private LatLng coordinates;
-    private MapFragment mMapFragment;
     private FileOutputStream fileOutputStream;
     private Chronometer chronometer;
-    private GoogleMapsItems googleMapsItems;
     private ImageView imageViewPosition;
     private ImageView imageViewOverflow;
     private ImageView imageViewMap;
     private MainActionBar mainActionBar;
-    private boolean isGPSready = false;
-    private int numberOfLocationPoint = 0;
     private float calory = 0;
     private float speed = 0;
     private float kilometers = 0;
@@ -87,7 +57,6 @@ public class ActivityMain extends ActionBarActivity implements
         mainActionBar.displayActionBar();
         GoogleServiceConnection service = new GoogleServiceConnection(this, fragmentMain);
         service.connectGoogleService();
-        //connectGoogleService();
     }
 
     //load FragmentMain
@@ -104,7 +73,7 @@ public class ActivityMain extends ActionBarActivity implements
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.imageView_position:
-                        setMapFragment();
+                        //setMapFragment();
                         hidePositionImageAndShowMapImage();
                         break;
                     case R.id.imageView_overflow:
@@ -141,17 +110,6 @@ public class ActivityMain extends ActionBarActivity implements
     private void displayActionBar() {
         actionBarMain.setCustomView(viewCustomActionBar);
         actionBarMain.setDisplayShowCustomEnabled(true);
-    }
-
-    //load MapFragment(for GoogleMap)
-    public void setMapFragment() {
-        mMapFragment = MapFragment.newInstance(getOption());
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.setCustomAnimations(R.animator.enter_anim, R.animator.exit_anim, R.animator.enter_anim, R.animator.exit_anim);
-        fragmentTransaction.add(R.id.fragmentContainer, mMapFragment);
-        fragmentTransaction.commit();
-        mMapFragment.getMapAsync(this);
     }
 
     //load last state of fragment
@@ -203,158 +161,6 @@ public class ActivityMain extends ActionBarActivity implements
         getFragmentManager().popBackStack();
     }
 
-   /* private void connectGoogleService() {
-        googleApiClient = new GoogleApiClient.Builder(this).
-                addConnectionCallbacks(this).
-                addOnConnectionFailedListener(this).
-                addApi(LocationServices.API).build();
-        googleApiClient.connect();
-    }*/
-
-    //activate when GoogleService is connected
-  /* @Override
-    public void onConnected(Bundle bundle) {
-        //checkGPSsettings();
-        // createLocationRequest();
-        // getLastLocation();
-        //startLocationUpdates();
-    }*/
-
-    //show this dialog when gps is off.
-  /*  private void checkGPSsettings() {
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationManager.addGpsStatusListener(this);
-        boolean isGpsOn = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!isGpsOn) {
-            alertDialogGps();
-        }
-    }*/
-
-    //dialog for gps off.
- /*   private void alertDialogGps() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
-        alertDialog.setTitle(getString(R.string.GPStitle));
-        alertDialog.setMessage(getString(R.string.GPSmessage));
-        alertDialog.setPositiveButton(getString(R.string.Settings), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-            }
-        });
-        alertDialog.setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                System.exit(1);
-                stopLocationUpdates();
-            }
-        });
-        alertDialog.setNeutralButton(getString(R.string.ignor), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        alertDialog.show();
-    }*/
-
-    //stop Location update
-    /*private void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(
-                googleApiClient, this);
-    }*/
-
-   /* private void createLocationRequest() {
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(5000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-
-    private void getLastLocation() {
-        lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-    }
-
-    private void startLocationUpdates() {
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                googleApiClient, locationRequest, this);
-    }*/
-
-  /*  @Override
-    public void onLocationChanged(Location location) {
-        calculateValues(location);
-    }*/
-
-    //show kilometers
-  /*  private void calculateValues(Location location) {
-        //todo: value for testing
-        location.setSpeed(15);
-        if (location != null && location.getSpeed() > MIN_SPEED && fragmentMain.isButtonStartClicked() && isGPSready) {
-            coordinates = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-            numberOfLocationPoint++;
-            if (numberOfLocationPoint != 1) {
-                googleMapsItems.getPoint(location);
-                calculateKilometers(location);
-                calculateSpeedAndCalory(location);
-                lastLocation.set(location);
-            }
-        }
-    }
-
-    private void calculateKilometers(Location location) {
-        kilometers = round(kilometers + lastLocation.distanceTo(location) / 1000, 2);
-        // fragmentMain.getDistance(kilometers);
-    }
-
-    private void calculateSpeedAndCalory(Location location) {
-        float speedInKilometers = location.getSpeed() * KILOMETER_FACTOR;
-        speed = round(speedInKilometers, 2);
-        // fragmentMain.getPredkosc(speed);
-        calculateCalory(speed);
-    }
-
-    private void calculateCalory(float speed) {
-        float wynik = 0;
-        if (speed < 5) {
-            wynik = speedMotion.slowSpeed();
-        } else if (speed < 10) {
-            wynik = speedMotion.middleSpeed();
-        } else if (speed > 10) {
-            wynik = speedMotion.fastSpeed();
-        }
-        calory = round(calory + wynik, 2);
-        //fragmentMain.getCalory(calory);
-    }
-
-    private float round(double f, int places) {
-        float temp = (float) (f * (Math.pow(10, places)));
-        temp = (Math.round(temp));
-        temp = temp / (int) (Math.pow(10, places));
-        return temp;
-    }*/
-/*
-    @Override
-    public void onConnectionSuspended(int i) {
-        showMessageConnectionSuspended();
-    }
-
-    private void showMessageConnectionSuspended() {
-        Context mContext = getApplicationContext();
-        CharSequence text = getString(R.string.disconnected_GoogleService);
-        Toast toast = Toast.makeText(mContext, text, Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        showMessageConnectionFailed();
-    }
-
-    private void showMessageConnectionFailed() {
-        Context context = getApplicationContext();
-        CharSequence text = getString(R.string.problemConnection_GoogleService);
-        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-        toast.show();
-    }*/
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -375,20 +181,6 @@ public class ActivityMain extends ActionBarActivity implements
         super.onStop();
     }
 
-    //activate when gps is set off.
-    /*@Override
-    public void onGpsStatusChanged(int event) {
-        *//*switch (event) {
-            case GpsStatus.GPS_EVENT_STARTED:
-                Toast.makeText(this, "gps ready", Toast.LENGTH_LONG).show();
-                isGPSready = true;
-                break;
-            case GpsStatus.GPS_EVENT_STOPPED:
-                startLocationUpdates();
-                break;
-        }*//*
-    }*/
-
     //listener for all smartphone buttons
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -396,43 +188,6 @@ public class ActivityMain extends ActionBarActivity implements
             setOnPupMenu(imageViewOverflow);
         }
         return super.onKeyUp(keyCode, event);
-    }
-
-    //activate when map is ready
-    @Override
-    public void onMapReady(GoogleMap var1) {
-        //googleMapsItems = new GoogleMapsItems(var1, coordinateList);
-        settingsForMap(var1);
-        if (fragmentMain.isRestartReady()) {
-            googleMap.setOnMyLocationChangeListener(null);
-            googleMapsItems.drawRouteAndaddMarker();
-            googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-                public void onMapLoaded() {
-                    ActivityMain.this.googleMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                        public void onSnapshotReady(Bitmap bitmap) {
-                            // Write image to disk
-                            alertDialogMap(bitmap);
-                            fragmentMain.setRestartFalse();
-                        }
-                    });
-                }
-            });
-        }
-    }
-
-    private void settingsForMap(GoogleMap map) {
-        final int ZOOM_POSITION = 14;
-        coordinates = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-        googleMap = map;
-        googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        googleMap.setMyLocationEnabled(true);
-        googleMap.setOnMyLocationChangeListener(this);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, ZOOM_POSITION));
-        googleMap.getCameraPosition();
-        UiSettings uiSettings = googleMap.getUiSettings();
-        uiSettings.setZoomControlsEnabled(true);
-        uiSettings.setRotateGesturesEnabled(true);
-        uiSettings.setMapToolbarEnabled(false);
     }
 
     //alertdialog to save history
@@ -522,15 +277,6 @@ public class ActivityMain extends ActionBarActivity implements
         }
     }
 
-    private GoogleMapOptions getOption() {
-        GoogleMapOptions options = new GoogleMapOptions();
-        options.mapType(GoogleMap.MAP_TYPE_SATELLITE)
-                .compassEnabled(false)
-                .rotateGesturesEnabled(false)
-                .tiltGesturesEnabled(false);
-        return options;
-    }
-
     //reset kilometers
     public void resetKilometry() {
         kilometers = 0;
@@ -550,11 +296,6 @@ public class ActivityMain extends ActionBarActivity implements
         });
         alertDialog.setNegativeButton(getString(R.string.no), null);
         alertDialog.show();
-    }
-
-    @Override
-    public void onMyLocationChange(Location location) {
-        googleMapsItems.drawRouteAndaddMarker();
     }
 }
 

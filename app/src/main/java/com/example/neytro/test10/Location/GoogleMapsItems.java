@@ -11,15 +11,20 @@ import java.util.ArrayList;
 /**
  * Created by Neytro on 2015-10-10.
  */
-public class GoogleMapsItems implements PointsGiver {
+public class GoogleMapsItems implements OnPointGiver {
     final int LINE_THINKNESS = 10;
     private GoogleMap googleMap;
-    private ArrayList<LatLng> coordinatePoints = new ArrayList<LatLng>();
+    static private ArrayList<LatLng> coordinatePoints = new ArrayList<LatLng>();
 
     public GoogleMapsItems(GoogleMap googleMap) {
         this.googleMap = googleMap;
 //        this.coordinatePoints = getCordinateList;
     }
+
+    public GoogleMapsItems() {
+//        this.coordinatePoints = getCordinateList;
+    }
+
 
     //draw route in google map
     public void drawRouteAndaddMarker() {
@@ -50,7 +55,7 @@ public class GoogleMapsItems implements PointsGiver {
     }
 
     @Override
-    public void getAllPoints(MainLocation mainLocation) {
-        coordinatePoints = mainLocation.getAllPoints();
+    public void getAllPoints(ArrayList<LatLng> listOfPoint) {
+        coordinatePoints = listOfPoint;
     }
 }

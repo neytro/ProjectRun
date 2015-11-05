@@ -10,9 +10,9 @@ import java.util.ArrayList;
 /**
  * Created by Neytro on 2015-11-01.
  */
-public class GoogleMapsCamera implements PointsGiver {
-    GoogleMap googleMap;
-    ArrayList<LatLng> coordinatePoints;
+public class GoogleMapsCamera {
+    private ArrayList<LatLng> coordinatePoints;
+
 
     public void folowGpsPosition(GoogleMap googleMap, Location location) {
         LatLng actualPosition = new LatLng(location.getLatitude(), location.getLongitude());
@@ -30,15 +30,5 @@ public class GoogleMapsCamera implements PointsGiver {
         }
     }
 
-   /* public void centerCamera(GoogleMap googleMap,Location location) {
-        final int ZOOM_POSITION = 14;
-        LatLng position = new LatLng(location.getLatitude(),location.getLongitude());
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_POSITION));
-        googleMap.getCameraPosition();
-    }*/
 
-    @Override
-    public void getAllPoints(MainLocation mainLocation) {
-        coordinatePoints = mainLocation.getAllPoints();
-    }
 }
