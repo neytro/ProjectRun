@@ -3,9 +3,7 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -13,14 +11,12 @@ import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 
 import com.example.neytro.test10.ActualTime;
+import com.example.neytro.test10.AlertDialogs;
 import com.example.neytro.test10.DbColumns;
 import com.example.neytro.test10.DbCreate;
 import com.example.neytro.test10.Fragments.FragmentMain;
@@ -66,101 +62,6 @@ public class ActivityMain extends ActionBarActivity {
         fragmentTransaction.add(R.id.fragmentContainer, fragmentMain).commit();
     }
 
-    //set actionbar for main activity
-    private void setCustomActionBar() {
-        View.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.imageView_position:
-                        //setMapFragment();
-                        hidePositionImageAndShowMapImage();
-                        break;
-                    case R.id.imageView_overflow:
-                        setOnPupMenu(v);
-                        break;
-                    case R.id.imageView_map:
-                        saveLastViewOfFragment();
-                        break;
-                }
-            }
-        };
-        setOptionForActionBar();
-        setListeners(listener);
-        displayActionBar();
-    }
-
-    private void setOptionForActionBar() {
-        actionBarMain = getSupportActionBar();
-        actionBarMain.setDisplayShowHomeEnabled(false);
-        actionBarMain.setDisplayShowTitleEnabled(false);
-    }
-
-    private void setListeners(View.OnClickListener listener) {
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-        viewCustomActionBar = layoutInflater.inflate(R.layout.custom_actionbar, null);
-        imageViewPosition = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_position);
-        imageViewOverflow = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_overflow);
-        imageViewMap = (ImageView) viewCustomActionBar.findViewById(R.id.imageView_map);
-        imageViewMap.setOnClickListener(listener);
-        imageViewOverflow.setOnClickListener(listener);
-        imageViewPosition.setOnClickListener(listener);
-    }
-
-    private void displayActionBar() {
-        actionBarMain.setCustomView(viewCustomActionBar);
-        actionBarMain.setDisplayShowCustomEnabled(true);
-    }
-
-    //load last state of fragment
-    public void hidePositionImageAndShowMapImage() {
-        imageViewMap.setVisibility(View.VISIBLE);
-        imageViewPosition.setVisibility(View.INVISIBLE);
-    }
-
-    //add menu to image in actionbar
-    private void setOnPupMenu(View view) {
-        Context context = getApplicationContext();
-        PopupMenu popup = new PopupMenu(context, view);
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.history:
-                        showHistory();
-                        break;
-                    case R.id.settings:
-                        showSettings();
-                        break;
-                    case R.id.exit:
-                        System.exit(1);
-                        break;
-                }
-                return false;
-            }
-        });
-        MenuInflater menuInflater = popup.getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, popup.getMenu());
-        popup.show();
-    }
-
-    private void showHistory() {
-        Intent intentHistory = new Intent(getApplication(), ActivityHistory.class);
-        startActivity(intentHistory);
-    }
-
-    private void showSettings() {
-        Intent intentSettings = new Intent(getApplication(), ActivitySettings.class);
-        startActivity(intentSettings);
-    }
-
-    //save last state of fragment
-    private void saveLastViewOfFragment() {
-        imageViewMap.setVisibility(View.INVISIBLE);
-        imageViewPosition.setVisibility(View.VISIBLE);
-        getFragmentManager().popBackStack();
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -185,7 +86,7 @@ public class ActivityMain extends ActionBarActivity {
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
-            setOnPupMenu(imageViewOverflow);
+            //setOnPupMenu(imageViewOverflow);
         }
         return super.onKeyUp(keyCode, event);
     }
@@ -268,12 +169,13 @@ public class ActivityMain extends ActionBarActivity {
     }
 
     //save last state of fragment
+    @Override
     public void onBackPressed() {
-        int count = getFragmentManager().getBackStackEntryCount();
+        int count = getSupportFragmentManager().getBackStackEntryCount();
         if (count == 0) {
-            alertDialogExit();
+            AlertDialogs alertDialogs = new AlertDialogs(this);
+            alertDialogs.alertDialogExit();
         } else {
-            saveLastViewOfFragment();
         }
     }
 

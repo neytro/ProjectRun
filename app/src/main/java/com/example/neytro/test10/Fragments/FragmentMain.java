@@ -199,33 +199,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
         progressBarMoveable.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"), PorterDuff.Mode.MULTIPLY);
     }
 
- /*   //todo: add km to reseources
-    //add distance
-    public void getDistance(float distance) {
-        this.distance = distance;
-        if (whichCategory == 0) {
-            textViewDistance.setText(String.valueOf(distance) + getString(R.string.unitKilometer));
-        }
-    }
 
-    //todo: add km/h to reseources
-    //add speed
-    public void getPredkosc(float speed) {
-        this.speed = speed;
-        if (whichCategory == 1) {
-            textViewDistance.setText(String.valueOf(speed) + getString(R.string.unitKilometerPerHour));
-        }
-    }*/
-
-
-    /*//todo: add kcal to reseources
-    //add calory
-    public void getCalory(float calory) {
-        this.calory = calory;
-        if (whichCategory == 2) {
-            textViewDistance.setText(String.valueOf(calory) + getString(R.string.kiloCalory));
-        }
-    }*/
 
     //start stopwatch
     public void timerStart() {
@@ -267,7 +241,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
     private void timerRestart() {
         ActivityMain activityMain = (ActivityMain) getActivity();
         //activityMain.setMapFragment();
-        activityMain.hidePositionImageAndShowMapImage();
+        //activityMain.hidePositionImageAndShowMapImage();
         buttonStart.setVisibility(View.VISIBLE);
         buttonResume.setVisibility(View.INVISIBLE);
         buttonRestart.setVisibility(View.INVISIBLE);

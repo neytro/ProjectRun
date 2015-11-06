@@ -17,6 +17,7 @@ public class FragmentGoogleMap {
     private MapFragment mapFragment;
     private OnMapReadyCallback listenerForMap;
     private Context context;
+    private FragmentManager fragmentManager;
 
     public FragmentGoogleMap(Context context) {
         this.context = context;
@@ -25,13 +26,21 @@ public class FragmentGoogleMap {
 
     public void setMapFragment() {
         mapFragment = MapFragment.newInstance(getOption());
-        FragmentManager fragmentManager = ((Activity) context).getFragmentManager();
+        fragmentManager = ((Activity) context).getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.setCustomAnimations(R.animator.enter_anim, R.animator.exit_anim, R.animator.enter_anim, R.animator.exit_anim);
         fragmentTransaction.add(R.id.fragmentContainer, mapFragment);
         fragmentTransaction.commit();
         mapFragment.getMapAsync(listenerForMap);
+    }
+
+    public void addToBackStack() {
+        fragmentManager.popBackStack();
+    }
+
+    public int getBackStackEntryCount() {
+        return fragmentManager.getBackStackEntryCount();
     }
 
     private GoogleMapOptions getOption() {

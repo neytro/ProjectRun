@@ -26,6 +26,7 @@ public class ListenersForActionBar implements View.OnClickListener {
         imageViewMap.setOnClickListener(this);
         imageViewOverflow.setOnClickListener(this);
         imageViewPosition.setOnClickListener(this);
+
     }
 
     private void addReferences(View view) {
@@ -45,7 +46,7 @@ public class ListenersForActionBar implements View.OnClickListener {
                 setOnPupMenu(v);
                 break;
             case R.id.imageView_map:
-                // saveLastViewOfFragment();
+                backToStack();
                 showPositionImage();
                 break;
         }
@@ -94,6 +95,16 @@ public class ListenersForActionBar implements View.OnClickListener {
         Intent intentSettings = new Intent(context, ActivitySettings.class);
         context.startActivity(intentSettings);
     }
+
+    private void backToStack() {
+        fragmentGoogleMap.addToBackStack();
+    }
+
+    private void alertDialogExit() {
+        AlertDialogs dialogExit = new AlertDialogs(context);
+        dialogExit.alertDialogExit();
+    }
+
     private void showPositionImage() {
         imageViewMap.setVisibility(View.INVISIBLE);
         imageViewPosition.setVisibility(View.VISIBLE);

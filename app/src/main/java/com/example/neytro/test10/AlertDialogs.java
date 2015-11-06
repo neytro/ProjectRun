@@ -38,4 +38,18 @@ public class AlertDialogs {
         });
         alertDialog.show();
     }
+
+    public void alertDialogExit() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_DARK);
+        alertDialog.setTitle(context.getString(R.string.exit));
+        alertDialog.setMessage(context.getString(R.string.messageExit));
+        alertDialog.setPositiveButton(context.getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                System.exit(1);
+            }
+        });
+        alertDialog.setNegativeButton(context.getString(R.string.no), null);
+        alertDialog.show();
+    }
 }
