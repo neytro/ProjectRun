@@ -9,14 +9,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.ImageView;
 
 import com.example.neytro.test10.ActualTime;
-import com.example.neytro.test10.AlertDialogs;
 import com.example.neytro.test10.DbColumns;
 import com.example.neytro.test10.DbCreate;
 import com.example.neytro.test10.Fragments.FragmentMain;
@@ -35,6 +33,7 @@ public class ActivityMain extends ActionBarActivity {
     private FragmentMain fragmentMain = new FragmentMain();
     private FileOutputStream fileOutputStream;
     private Chronometer chronometer;
+
     private ImageView imageViewPosition;
     private ImageView imageViewOverflow;
     private ImageView imageViewMap;
@@ -83,13 +82,13 @@ public class ActivityMain extends ActionBarActivity {
     }
 
     //listener for all smartphone buttons
-    @Override
+    /*@Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             //setOnPupMenu(imageViewOverflow);
         }
         return super.onKeyUp(keyCode, event);
-    }
+    }*/
 
     //alertdialog to save history
     public void alertDialogMap(final Bitmap bitmap) {
@@ -169,7 +168,7 @@ public class ActivityMain extends ActionBarActivity {
     }
 
     //save last state of fragment
-    @Override
+   /* @Override
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
         if (count == 0) {
@@ -177,7 +176,7 @@ public class ActivityMain extends ActionBarActivity {
             alertDialogs.alertDialogExit();
         } else {
         }
-    }
+    }*/
 
     //reset kilometers
     public void resetKilometry() {

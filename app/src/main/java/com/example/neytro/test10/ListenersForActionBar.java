@@ -1,6 +1,8 @@
 package com.example.neytro.test10;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +15,7 @@ import com.example.neytro.test10.Fragments.FragmentGoogleMap;
 /**
  * Created by Neytro on 2015-10-25.
  */
-public class ListenersForActionBar implements View.OnClickListener {
+public class ListenersForActionBar implements View.OnClickListener, KeyEvent.Callback {
     private ImageView imageViewPosition;
     private ImageView imageViewOverflow;
     private ImageView imageViewMap;
@@ -108,5 +110,26 @@ public class ListenersForActionBar implements View.OnClickListener {
     private void showPositionImage() {
         imageViewMap.setVisibility(View.INVISIBLE);
         imageViewPosition.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        return false;
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.d("numer 1", "");
+        return false;
+    }
+
+    @Override
+    public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
+        return false;
     }
 }

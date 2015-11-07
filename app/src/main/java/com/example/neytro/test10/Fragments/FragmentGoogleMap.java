@@ -39,8 +39,9 @@ public class FragmentGoogleMap {
         fragmentManager.popBackStack();
     }
 
-    public int getBackStackEntryCount() {
-        return fragmentManager.getBackStackEntryCount();
+    public FragmentManager getFragmentmanager() {
+        return fragmentManager;
+
     }
 
     private GoogleMapOptions getOption() {
