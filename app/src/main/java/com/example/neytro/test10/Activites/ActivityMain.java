@@ -172,7 +172,6 @@ public class ActivityMain extends ActionBarActivity {
         calory = 0;
     }
 
-    //save last state of fragment
     @Override
     public void onBackPressed() {
         FragmentManager manager = getFragmentManager();
