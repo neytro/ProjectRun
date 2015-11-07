@@ -15,6 +15,7 @@ import android.widget.Chronometer;
 import android.widget.ImageView;
 
 import com.example.neytro.test10.ActualTime;
+import com.example.neytro.test10.AlertDialogs;
 import com.example.neytro.test10.DbColumns;
 import com.example.neytro.test10.DbCreate;
 import com.example.neytro.test10.Fragments.FragmentMain;
@@ -33,7 +34,6 @@ public class ActivityMain extends ActionBarActivity {
     private FragmentMain fragmentMain = new FragmentMain();
     private FileOutputStream fileOutputStream;
     private Chronometer chronometer;
-
     private ImageView imageViewPosition;
     private ImageView imageViewOverflow;
     private ImageView imageViewMap;
@@ -80,7 +80,6 @@ public class ActivityMain extends ActionBarActivity {
     protected void onStop() {
         super.onStop();
     }
-
     //listener for all smartphone buttons
     /*@Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -167,36 +166,31 @@ public class ActivityMain extends ActionBarActivity {
         return actualTime;
     }
 
-    //save last state of fragment
-   /* @Override
-    public void onBackPressed() {
-        int count = getSupportFragmentManager().getBackStackEntryCount();
-        if (count == 0) {
-            AlertDialogs alertDialogs = new AlertDialogs(this);
-            alertDialogs.alertDialogExit();
-        } else {
-        }
-    }*/
-
     //reset kilometers
     public void resetKilometry() {
         kilometers = 0;
         calory = 0;
     }
 
-    //alertdialog for Exit form application
-    private void alertDialogExit() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
-        alertDialog.setTitle(getString(R.string.exit));
-        alertDialog.setMessage(getString(R.string.messageExit));
-        alertDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                System.exit(1);
-            }
-        });
-        alertDialog.setNegativeButton(getString(R.string.no), null);
-        alertDialog.show();
+    //save last state of fragment
+    @Override
+    public void onBackPressed() {
+        FragmentManager manager = getFragmentManager();
+        int count = manager.getBackStackEntryCount();
+        if (count == 0) {
+            showAlertDialogExit();
+        } else {
+            backToPreviousFragment(manager);
+        }
+    }
+
+    private void showAlertDialogExit() {
+        AlertDialogs alertDialogs = new AlertDialogs(this);
+        alertDialogs.alertDialogExit();
+    }
+
+    private void backToPreviousFragment(FragmentManager manager) {
+        manager.popBackStack();
     }
 }
 
