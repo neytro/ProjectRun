@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -171,17 +172,8 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
         progressBarMoveable.setVisibility(View.INVISIBLE);
     }
 
-    //check if stopwatch is ready
-    public boolean isButtonStartClicked() {
-        return isRunnerReady;
-    }
-
     public boolean isRestartReady() {
         return isRestartReady;
-    }
-
-    public void setRestartFalse() {
-        isRestartReady = false;
     }
 
     //calcualte hour for stopwatch
@@ -198,8 +190,6 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
         progressBarConstant.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"), PorterDuff.Mode.MULTIPLY);
         progressBarMoveable.getIndeterminateDrawable().setColorFilter(Color.parseColor("#80DAEB"), PorterDuff.Mode.MULTIPLY);
     }
-
-
 
     //start stopwatch
     public void timerStart() {
@@ -239,9 +229,7 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
 
     //restart stopwatch
     private void timerRestart() {
-        ActivityMain activityMain = (ActivityMain) getActivity();
-        //activityMain.setMapFragment();
-        //activityMain.hidePositionImageAndShowMapImage();
+
         buttonStart.setVisibility(View.VISIBLE);
         buttonResume.setVisibility(View.INVISIBLE);
         buttonRestart.setVisibility(View.INVISIBLE);
@@ -252,14 +240,15 @@ public class FragmentMain extends Fragment implements Chronometer.OnChronometerT
         chronometer.setFormat("00:%s");
         isMapReady = false;
         isRestartReady = true;
+
     }
+
 
     @Override
     public void getRunningValue(RunningValues values) {
         calory = values.getCalory();
         speed = values.getSpeed();
         distance = values.getDistance();
-        Toast.makeText(getActivity(), "maszyna ruszyla", Toast.LENGTH_LONG).show();
         switch (whichCategory) {
             case 0:
                 textViewDistance.setText(String.valueOf(distance) + getString(R.string.unitKilometer));

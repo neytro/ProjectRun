@@ -53,6 +53,9 @@ public class GoogleMapsItems implements OnPointGiver {
         markerOptions.title("START");
         return markerOptions;
     }
+    public static ArrayList<LatLng> getCordinatePoints () {
+        return coordinatePoints;
+    }
 
     @Override
     public void getAllPoints(ArrayList<LatLng> listOfPoint) {

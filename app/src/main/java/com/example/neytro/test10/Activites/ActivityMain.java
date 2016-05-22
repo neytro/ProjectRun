@@ -18,6 +18,7 @@ import com.example.neytro.test10.ActualTime;
 import com.example.neytro.test10.AlertDialogs;
 import com.example.neytro.test10.DbColumns;
 import com.example.neytro.test10.DbCreate;
+import com.example.neytro.test10.Fragments.FragmentGoogleMap;
 import com.example.neytro.test10.Fragments.FragmentMain;
 import com.example.neytro.test10.LoadingImage;
 import com.example.neytro.test10.Location.GoogleServiceConnection;
@@ -31,7 +32,7 @@ public class ActivityMain extends ActionBarActivity {
     private android.support.v7.app.ActionBar actionBarMain;
     private View viewCustomActionBar;
     private View viewFragmentmain;
-    private FragmentMain fragmentMain = new FragmentMain();
+    static private FragmentMain fragmentMain = new FragmentMain();
     private FileOutputStream fileOutputStream;
     private Chronometer chronometer;
     private ImageView imageViewPosition;
@@ -80,17 +81,10 @@ public class ActivityMain extends ActionBarActivity {
     protected void onStop() {
         super.onStop();
     }
-    //listener for all smartphone buttons
-    /*@Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            //setOnPupMenu(imageViewOverflow);
-        }
-        return super.onKeyUp(keyCode, event);
-    }*/
+
 
     //alertdialog to save history
-    public void alertDialogMap(final Bitmap bitmap) {
+    public void alertDiablogMap(final Bitmap bitmap) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
         alertDialog.setTitle(getString(R.string.saveHistory));
         alertDialog.setMessage(getString(R.string.saveState));
@@ -190,6 +184,9 @@ public class ActivityMain extends ActionBarActivity {
 
     private void backToPreviousFragment(FragmentManager manager) {
         manager.popBackStack();
+    }
+    static public FragmentMain getFragmentMain() {
+        return fragmentMain;
     }
 }
 

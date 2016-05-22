@@ -88,7 +88,6 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
 
     @Override
     public void onLocationChanged(Location location) {
-        Toast.makeText(context, "ruszasz sie", Toast.LENGTH_LONG).show();
         calculateValues(location);
     }
 
@@ -128,13 +127,11 @@ public class MainLocation implements LocationListener, GpsStatus.Listener {
     public void onGpsStatusChanged(int event) {
         switch (event) {
             case GpsStatus.GPS_EVENT_STARTED:
-                Toast.makeText(context, "ruszyl jak cholera", Toast.LENGTH_LONG).show();
                 createLocationRequest();
                 startLocationUpdates();
                 break;
             case GpsStatus.GPS_EVENT_STOPPED:
                 stopLocationUpdates();
-                Toast.makeText(context, "zatrzymal sie jak cholera", Toast.LENGTH_LONG).show();
                 break;
         }
     }

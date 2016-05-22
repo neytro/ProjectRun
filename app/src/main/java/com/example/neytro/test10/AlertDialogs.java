@@ -3,12 +3,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.provider.Settings;
+
+
 /**
  * Created by Neytro on 2015-10-26.
  */
 public class AlertDialogs {
-    //dialog for gps off.
     Context context;
 
     public AlertDialogs(Context context) {
@@ -50,6 +52,31 @@ public class AlertDialogs {
             }
         });
         alertDialog.setNegativeButton(context.getString(R.string.no), null);
+        alertDialog.show();
+    }
+    public void alertDialogMap(final Bitmap bitmap) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_DARK);
+        alertDialog.setTitle(context.getString(R.string.saveHistory));
+        alertDialog.setMessage(context.getString(R.string.saveState));
+        alertDialog.setPositiveButton(context .getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                takeScreenShoot();
+               // saveDatabase();
+               // resetPeriodTime();
+              //  resetKilometry();
+            }
+
+            private void takeScreenShoot() {
+                LoadingImage.getSnapshot(bitmap);
+            }
+        });
+        alertDialog.setNegativeButton(context.getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //resetPeriodTime();
+            }
+        });
         alertDialog.show();
     }
 }

@@ -2,9 +2,15 @@ package com.example.neytro.test10.Location;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.neytro.test10.Activites.ActivityMain;
+import com.example.neytro.test10.AlertDialogs;
 import com.example.neytro.test10.Fragments.FragmentMain;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
@@ -24,7 +30,7 @@ public class GoogleMapsMain implements
     private GoogleMapsCamera googleMapsCamera;
 
     public GoogleMapsMain(Context context) {
-        fragmentMain = new FragmentMain();
+        fragmentMain = ActivityMain.getFragmentMain();
         this.context = context;
         googleMapsCamera = new GoogleMapsCamera();
     }
@@ -35,8 +41,9 @@ public class GoogleMapsMain implements
         googleMapsItems = new GoogleMapsItems(googleMap);
         settingsForMap();
         if (fragmentMain.isRestartReady()) {
-            deactiveLocationChanges();
+            Toast.makeText(context, "ready", Toast.LENGTH_SHORT).show();
             activeListenerForMapLoader();
+            deactiveLocationChanges();
             drawRoute();
         }
     }
@@ -61,9 +68,8 @@ public class GoogleMapsMain implements
 
     @Override
     public void onMyLocationChange(Location location) {
-        Toast.makeText(context, "location is changed", Toast.LENGTH_LONG).show();
         this.location = location;
-        moveCameraToCenterOfScreen();
+        centerCamera();
         drawRoute();
     }
 
@@ -81,13 +87,18 @@ public class GoogleMapsMain implements
 
     @Override
     public void onMapLoaded() {
+        Toast.makeText(context, "polaczyles sie", Toast.LENGTH_SHORT).show();
         googleMap.snapshot(this);
     }
 
     @Override
     public void onSnapshotReady(Bitmap bitmap) {
-        //alertDialogMap(bitmap);
-        fragmentMain.setRestartFalse();
+        showAlertDialogMap(bitmap);
+    }
+
+    private void showAlertDialogMap(Bitmap bitmap) {
+        AlertDialogs alertDialogs = new AlertDialogs(context);
+        alertDialogs.alertDialogMap(bitmap);
     }
 
     private void drawRoute() {
@@ -97,6 +108,12 @@ public class GoogleMapsMain implements
     private void moveCameraToCenterOfScreen() {
         if (location != null) {
             googleMapsCamera.folowGpsPosition(googleMap, location);
+        }
+    }
+
+    private void centerCamera() {
+        if (location != null) {
+            googleMapsCamera.catchAllItems(googleMap);
         }
     }
 }

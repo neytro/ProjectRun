@@ -52,8 +52,14 @@ public class ListenersForActionBar implements View.OnClickListener {
     }
 
     private void showGoogleMap() {
-        fragmentGoogleMap = new FragmentGoogleMap(context);
-        fragmentGoogleMap.setMapFragment();
+        if (fragmentGoogleMap == null) {
+
+            fragmentGoogleMap = new FragmentGoogleMap(context);
+        }
+            fragmentGoogleMap.setMapFragment();
+
+
+
     }
 
     private void showStopWatchImage() {
@@ -103,5 +109,4 @@ public class ListenersForActionBar implements View.OnClickListener {
         imageViewMap.setVisibility(View.INVISIBLE);
         imageViewPosition.setVisibility(View.VISIBLE);
     }
-
 }

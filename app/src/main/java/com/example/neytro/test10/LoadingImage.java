@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -147,5 +148,17 @@ public class LoadingImage {
         String mImageName = "MI_" + timeStamp + ".jpg";
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
         return mediaFile;
+    }
+    static public void getSnapshot(Bitmap bitmap) {
+        FileOutputStream fileOutputStream;
+        final int QUALITY = 100;
+        try {
+            fileOutputStream = new FileOutputStream(LoadingImage.pathForImage());
+            bitmap.compress(Bitmap.CompressFormat.JPEG, QUALITY, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

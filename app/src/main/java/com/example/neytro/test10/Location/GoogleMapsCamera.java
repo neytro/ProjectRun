@@ -1,6 +1,9 @@
 package com.example.neytro.test10.Location;
 import android.location.Location;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.example.neytro.test10.Activites.ActivityMain;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -19,16 +22,24 @@ public class GoogleMapsCamera {
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(actualPosition));
     }
 
+
     public void catchAllItems(GoogleMap googleMap) {
+        coordinatePoints = GoogleMapsItems.getCordinatePoints();
         final int BOUND_FRAME = 100;
+
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        if (coordinatePoints.size() >= 1) {
-            for (LatLng points : coordinatePoints) {
-                builder.include(points);
-            }
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), BOUND_FRAME));
-        }
+
+
+                if (coordinatePoints.size() >= 1) {
+                    for (LatLng points : coordinatePoints) {
+                        builder.include(points);
+                    }
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), BOUND_FRAME));
+                }
+
     }
+
+
 
 
 }

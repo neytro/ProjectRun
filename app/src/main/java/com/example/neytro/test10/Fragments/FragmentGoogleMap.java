@@ -10,6 +10,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 /**
  * Created by Neytro on 2015-11-01.
  */
@@ -41,7 +42,6 @@ public class FragmentGoogleMap {
 
     public FragmentManager getFragmentmanager() {
         return fragmentManager;
-
     }
 
     private GoogleMapOptions getOption() {
@@ -50,6 +50,9 @@ public class FragmentGoogleMap {
                 .compassEnabled(false)
                 .rotateGesturesEnabled(false)
                 .tiltGesturesEnabled(false);
+
         return options;
     }
+
+
 }
