@@ -84,7 +84,7 @@ public class ActivityMain extends ActionBarActivity {
 
 
     //alertdialog to save history
-    public void alertDiablogMap(final Bitmap bitmap) {
+   /* public void alertDiablogMap(final Bitmap bitmap) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
         alertDialog.setTitle(getString(R.string.saveHistory));
         alertDialog.setMessage(getString(R.string.saveState));
@@ -104,7 +104,7 @@ public class ActivityMain extends ActionBarActivity {
             }
         });
         alertDialog.show();
-    }
+    }*/
 
     //take screenshot form googleMap
     private void getSnapshot(Bitmap bitmap) {
@@ -120,7 +120,7 @@ public class ActivityMain extends ActionBarActivity {
     }
 
     //save value in database
-    private void saveDatabase() {
+   /* private void saveDatabase() {
         chronometer = (Chronometer) findViewById(R.id.chronometer);
         DbCreate myDatabase = new DbCreate(this);
         SQLiteDatabase database = myDatabase.getWritableDatabase();
@@ -139,9 +139,9 @@ public class ActivityMain extends ActionBarActivity {
         values.put(DbColumns.FeedEntry.COLUMN_NAME_TIME_PERIOD, fragmentMain.setPeriodTime());
         values.put(DbColumns.FeedEntry.COLUMN_NAME_SCREENSHOOT, pathForImage);
         return values;
-    }
+    }*/
 
-    private void resetPeriodTime() {
+/*    private void resetPeriodTime() {
         if (chronometer != null) {
             chronometer.setBase(SystemClock.elapsedRealtime());
         }
@@ -164,7 +164,7 @@ public class ActivityMain extends ActionBarActivity {
     public void resetKilometry() {
         kilometers = 0;
         calory = 0;
-    }
+    }*/
 
     @Override
     public void onBackPressed() {
